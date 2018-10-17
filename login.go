@@ -5,15 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/satori/go.uuid"
+	"github.com/cocoagaurav/httpHandler/model"
+	"github.com/shaleapps/agnus-server/model"
 	"net/http"
-	"testproc/models"
 	"time"
 )
-func init(){
-	UserCache = make(map[string]*models.User)
-}
 
-var UserCache map[string]*models.User
+var UserCache map[string]*model.User
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, formpage)

@@ -2,12 +2,16 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/cocoagaurav/httpHandler/models"
 	"log"
 	"net/http"
 )
 import _ "github.com/go-sql-driver/mysql"
 
 
+func init(){
+	UserCache = make(map[string]*model.User)
+}
 
 var UserToken string
 var route =mux.NewRouter()
