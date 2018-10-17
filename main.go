@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"github.com/cocoagaurav/httpHandler/model"
+	"github.com/rubenv/sql-migrate"
+	"github.com/shaleapps/agnus-server/migrations"
 	"log"
 	"net/http"
 )
@@ -19,6 +21,11 @@ var route =mux.NewRouter()
 func main() {
 
 	Db=opendatabase()
+	_,err:=migrate.Exec(Db,"mysql",migrations.M)
+	if(err!=nil){
+		log.Fatal(err.Error())
+		return
+	}
 
 	route.HandleFunc("/",formHandler)
 	route.HandleFunc("/success",simpleMiddleware(afterLoginHandler))
