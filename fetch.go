@@ -5,7 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"testproc/models"
+	"github.com/cocoagaurav/httpHandler/model"
+
 )
 
 func fetchformhandler(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +25,7 @@ func fetchHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 		}
-	userpost:=&models.User{}
+	userpost:=&model.User{}
 	err=json.NewDecoder(r.Body).Decode(userpost)
 	if (err != nil) {
 		w.WriteHeader(http.StatusNoContent)

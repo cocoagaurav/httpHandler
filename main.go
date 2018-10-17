@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/cocoagaurav/httpHandler/models"
+	"github.com/cocoagaurav/httpHandler/model"
 	"log"
 	"net/http"
 )

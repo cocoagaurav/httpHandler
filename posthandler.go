@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/model"
 	"net/http"
-	"testproc/models"
 )
 
 func afterLoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +25,7 @@ func posthandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	uid:=UserCache[c.Value]
-	newpost:=&models.Post{}
+	newpost:=&model.Post{}
 	err=json.NewDecoder(r.Body).Decode(newpost)
 	if(err!=nil){
 		w.WriteHeader(http.StatusBadRequest)

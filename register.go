@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"testproc/models"
+	"github.com/cocoagaurav/httpHandler/model"
+
 )
 
 func registerformHandler(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +19,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	newUser := &models.User{}
+	newUser := &model.User{}
 	err = json.NewDecoder(r.Body).Decode(newUser)
 	if err != nil {
 		w.WriteHeader(http.StatusNoContent)

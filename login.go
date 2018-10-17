@@ -22,7 +22,7 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 		age int
 	)
 
-	loginUser := &models.User{}
+	loginUser := &model.User{}
 	err:= json.NewDecoder(r.Body).Decode(loginUser)
 	if(err!=nil){
 		w.WriteHeader(http.StatusBadRequest)
@@ -49,11 +49,11 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 	if loginUser.Name == name && loginUser.Age == age {
 
 		redirect = "/success"
-		token,err := uuid.NewV4()
-		if err!=nil{
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
+		token:= uuid.NewV4()
+		//if err!=nil{
+		//	w.WriteHeader(http.StatusInternalServerError)
+		//	return
+		//}
 		UserToken=token.String()
 		UserCache[UserToken] = loginUser
 
