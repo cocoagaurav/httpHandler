@@ -21,7 +21,7 @@ var route =mux.NewRouter()
 func main() {
 
 	Db=opendatabase()
-	_,err:=migrate.Exec(Db,"mysql",migrations.M)
+	_,err:=migrate.Exec(Db,"mysql",migrations)
 	if(err!=nil){
 		log.Fatal(err.Error())
 		return
