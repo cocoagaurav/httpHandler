@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/satori/go.uuid"
 	"github.com/cocoagaurav/httpHandler/model"
-	"github.com/shaleapps/agnus-server/model"
 	"net/http"
 	"time"
 )
