@@ -7,7 +7,7 @@ var Db,DataBase *sql.DB
 
 func opendatabase() *sql.DB{
 	var err error
-	DataBase, err = sql.Open("mysql", "root:password123@tcp(127.0.0.1:3306)/test")
+	DataBase, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
 	}

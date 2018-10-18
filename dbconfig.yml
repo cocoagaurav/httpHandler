@@ -1,0 +1,10 @@
+development:
+dialect: mysql
+datasource: test
+dir: migrations/mysql
+
+production:
+  dialect: mysql
+  datasource: root:password123@/test?parseTime=true
+  dir: migrations/mysql
+  table: migrations
