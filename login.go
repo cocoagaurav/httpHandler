@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/satori/go.uuid"
 	"github.com/cocoagaurav/httpHandler/model"
 	"net/http"
@@ -13,7 +14,7 @@ import (
 var UserCache map[string]*model.User
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, formpage)
+	fmt.Fprintf(w, htmlPages.Formpage)
 }
 func loginhandler(w http.ResponseWriter, r *http.Request) {
 

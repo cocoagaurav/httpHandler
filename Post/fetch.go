@@ -1,26 +1,26 @@
-package main
+package Post
 
 import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/database"
+	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"net/http"
 	"github.com/cocoagaurav/httpHandler/model"
+	)
 
-)
-
-func fetchformhandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, fetchform)
+func Fetchformhandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, htmlPages.Fetchform)
 }
 
-
-func fetchHandler(w http.ResponseWriter, r *http.Request) {
+func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	var (
 		userid int
 		title string
 		description string
 	)
-	err:=Db.Ping()
+	err:=database.Db.Ping()
 	if(err!=nil){
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -30,7 +30,7 @@ func fetchHandler(w http.ResponseWriter, r *http.Request) {
 	if (err != nil) {
 		w.WriteHeader(http.StatusNoContent)
 	}
-	data, err := Db.Query("select * from post where USERID=(select UID from user where name=?)", userpost.Name)
+	data, err := database.Db.Query("select * from post where USERID=(select UID from user where name=?)", userpost.Name)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			w.WriteHeader(http.StatusNonAuthoritativeInfo)

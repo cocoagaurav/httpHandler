@@ -1,6 +1,6 @@
-package main
+package htmlPages
 
-const formpage = `
+const Formpage = `
   <h1>Login</h1>
   <form method="POST" action="/login">
       <label for="name">name</label>
@@ -16,7 +16,7 @@ const formpage = `
   </form>
  `
 
-const registerpage = `
+const Registerpage = `
   <h1>register</h1>
   <form method="GET" action="/register">
       <label for="name">name</label>
@@ -29,7 +29,7 @@ const registerpage = `
   </form>
  `
 
-const internalPage = `
+const InternalPage = `
  <h1>Internal</h1>
  <hr>
  <small>User: %s</small>
@@ -44,7 +44,7 @@ const internalPage = `
  </form>
  `
 
-const fetchform = `
+const Fetchform = `
 <h1>fetch details<h1>
 <form method="POST" action="/fetch">
         <label for="name">name</label>

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/cocoagaurav/httpHandler/Post"
+	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/migration"
 	"github.com/cocoagaurav/httpHandler/model"
 	_ "github.com/go-sql-driver/mysql"
@@ -14,15 +16,14 @@ import (
 func init(){
 	UserCache = make(map[string]*model.User)
 }
-
-
-
 var UserToken string
 var route =mux.NewRouter()
 func main() {
-	Db=opendatabase()
+	database.Db=database.Opendatabase()
+	Post.RabbitConn()
+	Post.MakeRabbitQ()
 	migration1:=migration.Getmigration()
-	_,err:=migrate.Exec(Db,"mysql",migration1,migrate.Up)
+	_,err:=migrate.Exec(database.Db,"mysql",migration1,migrate.Up)
 	if(err!=nil){
 		log.Fatal(err.Error())
 		return
@@ -33,14 +34,14 @@ func main() {
 	//	log.Fatalf("Failed to initialize DB")
 	//}
 	route.HandleFunc("/",formHandler)
-	route.HandleFunc("/success",simpleMiddleware(afterLoginHandler))
+	route.HandleFunc("/success",simpleMiddleware(Post.AfterLoginHandler))
 	route.HandleFunc("/registerform",registerformHandler)
 	route.HandleFunc("/register",registerHandler)
-	route.HandleFunc("/post",posthandler)
+	route.HandleFunc("/post",Post.Posthandler)
 	route.HandleFunc("/login",loginhandler)
 	route.HandleFunc("/logout",logoutHandler)
-	route.HandleFunc("/fetchformhandler",fetchformhandler)
-	route.HandleFunc("/fetch",fetchHandler).Methods("POST")
+	route.HandleFunc("/fetchformhandler",Post.Fetchformhandler)
+	route.HandleFunc("/fetch",Post.FetchHandler).Methods("POST")
 	http.Handle("/",route)
 
 	log.Printf("Starting Sever :%v",8081)
