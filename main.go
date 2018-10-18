@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/cocoagaurav/httpHandler/migration"
 	"github.com/cocoagaurav/httpHandler/model"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -20,6 +21,7 @@ var UserToken string
 var route =mux.NewRouter()
 func main() {
 	Db=opendatabase()
+	migration1:=migration.Getmigration()
 	_,err:=migrate.Exec(Db,"mysql",migration1,migrate.Up)
 	if(err!=nil){
 		log.Fatal(err.Error())

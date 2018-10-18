@@ -1,4 +1,4 @@
-package main
+package migration
 
 import "github.com/rubenv/sql-migrate"
 
@@ -27,6 +27,6 @@ var Migration = &migrate.MemoryMigrationSource{
 	},
 }
 
-func getmigration() migrate.MemoryMigrationSource {
+func Getmigration() migrate.MemoryMigrationSource {
 	return *Migration
 }
