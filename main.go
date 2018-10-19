@@ -3,49 +3,47 @@ package main
 import (
 	"github.com/cocoagaurav/httpHandler/Post"
 	"github.com/cocoagaurav/httpHandler/database"
-	"github.com/cocoagaurav/httpHandler/migration"
-	"github.com/cocoagaurav/httpHandler/model"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	"github.com/rubenv/sql-migrate"
 	"log"
 	"net/http"
 )
 
+//func init() {
+//	UserCache = make(map[string]*model.User)
+//}
 
-func init(){
-	UserCache = make(map[string]*model.User)
-}
 var UserToken string
-var route =mux.NewRouter()
+var route = mux.NewRouter()
+
 func main() {
-	database.Db=database.Opendatabase()
+	database.Db = database.Opendatabase()
 	Post.RabbitConn()
 	Post.MakeRabbitQ()
-	migration1:=migration.Getmigration()
-	_,err:=migrate.Exec(database.Db,"mysql",migration1,migrate.Up)
-	if(err!=nil){
-		log.Fatal(err.Error())
-		return
-	}
+	//migration1:=migration.Getmigration()
+	//_,err:=migrate.Exec(database.Db,"mysql",migration1,migrate.Up)
+	//if(err!=nil){
+	//	log.Fatal(err.Error())
+	//	return
+	//}
 	//Db , err  := openDatabase("root:password123@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local")
 	//defer Db.Close()
 	//if err!=nil{
 	//	log.Fatalf("Failed to initialize DB")
 	//}
-	route.HandleFunc("/",formHandler)
-	route.HandleFunc("/success",simpleMiddleware(Post.AfterLoginHandler))
-	route.HandleFunc("/registerform",registerformHandler)
-	route.HandleFunc("/register",registerHandler)
-	route.HandleFunc("/post",Post.Posthandler)
-	route.HandleFunc("/login",loginhandler)
-	route.HandleFunc("/logout",logoutHandler)
-	route.HandleFunc("/fetchformhandler",Post.Fetchformhandler)
-	route.HandleFunc("/fetch",Post.FetchHandler).Methods("POST")
-	http.Handle("/",route)
+	route.HandleFunc("/", formHandler)
+	route.HandleFunc("/success", simpleMiddleware(Post.AfterLoginHandler))
+	route.HandleFunc("/registerform", registerformHandler)
+	route.HandleFunc("/register", registerHandler)
+	route.HandleFunc("/post", Post.Posthandler)
+	route.HandleFunc("/login", loginhandler)
+	route.HandleFunc("/logout", logoutHandler)
+	route.HandleFunc("/fetchformhandler", Post.Fetchformhandler)
+	route.HandleFunc("/fetch", Post.FetchHandler).Methods("POST")
+	http.Handle("/", route)
 
-	log.Printf("Starting Sever :%v",8081)
-	http.ListenAndServe(":8081",nil)
+	log.Printf("Starting Sever :%v", 8080)
+	http.ListenAndServe(":8080", nil)
 
 }
 
@@ -65,5 +63,3 @@ func main() {
 //	}
 //	return db,nil
 //}
-
-

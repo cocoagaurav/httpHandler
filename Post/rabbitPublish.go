@@ -2,9 +2,6 @@ package Post
 
 import (
 	"bytes"
-	"encoding/json"
-	"github.com/cocoagaurav/httpHandler/database"
-	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/streadway/amqp"
 	"io"
 	"log"
@@ -41,31 +38,6 @@ func ConsumeMssg() {
 		log.Fatal(err)
 		return
 	}
-}
-
-func Appendmssg(post []byte) {
-	go func() {
-		for msg := range Mssg {
-			newpost := &model.Post{}
-			data := bytes.NewReader(msg.Body)
-			err := json.NewDecoder(data).Decode(newpost)
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-			q, err := database.Db.Prepare("insert into post values(?,?,?)")
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-			_, err = q.Exec()
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-
-		}
-	}()
 }
 
 func StreamToByte(stream io.Reader) []byte {

@@ -4,9 +4,10 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
-	"github.com/satori/go.uuid"
 	"github.com/cocoagaurav/httpHandler/model"
+	"github.com/satori/go.uuid"
 	"net/http"
 	"time"
 )
@@ -18,73 +19,51 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 }
 func loginhandler(w http.ResponseWriter, r *http.Request) {
 
-	var(
+	var (
 		name string
-		age int
+		age  int
 	)
 
 	loginUser := &model.User{}
-	err:= json.NewDecoder(r.Body).Decode(loginUser)
-	if(err!=nil){
+	err := json.NewDecoder(r.Body).Decode(loginUser)
+	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	fmt.Printf("loginUser :[%+v]",loginUser)
+	fmt.Printf("loginUser :[%+v]", loginUser)
 
 	redirect := "/"
-	cred := Db.QueryRow("select name,age from user where UID=?", loginUser.Id)
+	cred := database.Db.QueryRow("select name,age from user where UID=?", loginUser.Id)
 
 	err = cred.Scan(&name, &age)
-	fmt.Println("database values are:",name,age)
-	if (err != nil){
+	fmt.Println("database values are:", name, age)
+	if err != nil {
 		if err == sql.ErrNoRows {
 			w.WriteHeader(http.StatusNonAuthoritativeInfo)
 			return
-		}else{
+		} else {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
+		}
 	}
-	}
-	status:=http.StatusFound
+	status := http.StatusFound
 	if loginUser.Name == name && loginUser.Age == age {
 
 		redirect = "/success"
-		token:= uuid.NewV4()
-		//if err!=nil{
-		//	w.WriteHeader(http.StatusInternalServerError)
-		//	return
-		//}
-		UserToken=token.String()
-		UserCache[UserToken] = loginUser
+		token := uuid.NewV4()
 
-		http.SetCookie(w,&http.Cookie{
-			Name:  "sessiontoken",
-			Value: UserToken,
-			Expires:time.Now().Add(24*time.Hour),
+		UserToken = token.String()
+		database.UserCache[UserToken] = loginUser
+
+		http.SetCookie(w, &http.Cookie{
+			Name:    "sessiontoken",
+			Value:   UserToken,
+			Expires: time.Now().Add(24 * time.Hour),
 		})
 
-	}else{
-			status=http.StatusNotFound
-		}
+	} else {
+		status = http.StatusNotFound
+	}
 	http.Redirect(w, r, redirect, status)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
