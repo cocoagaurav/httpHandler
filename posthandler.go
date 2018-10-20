@@ -1,13 +1,13 @@
-package Post
+package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/labstack/gommon/log"
+	"github.com/streadway/amqp"
 	"net/http"
 )
 
@@ -46,35 +46,34 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("json data is:%s", string(jsonpost))
 
-	MakeRabbitQ()
-
-	Publish(jsonpost)
-
-	ConsumeMssg()
-
-	go func() {
-		for msg := range Mssg {
-			post := &model.Post{}
-			data := bytes.NewReader(msg.Body)
-			err := json.NewDecoder(data).Decode(post)
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-			q, err := database.Db.Prepare("insert into post values(?,?,?)")
-			defer q.Close()
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
-			_, err = q.Exec(post.Id, post.Title, post.Discription)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-
-		}
-	}()
+	Ch, err := Conn.Channel()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	Q, err := Ch.QueueDeclare(
+		"PostQ",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	err = Ch.Publish(
+		"",
+		Q.Name,
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        jsonpost,
+		})
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
 	////fmt.Printf("newpost :[%+v]",newpost)
 
 	//q, err := database.Db.Prepare("insert into post values(?,?,?)")

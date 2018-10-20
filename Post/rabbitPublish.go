@@ -1,33 +1,17 @@
-package Post
+package main
 
 import (
 	"bytes"
-	"github.com/streadway/amqp"
+	"fmt"
 	"io"
 	"log"
 )
-
-func Publish(post []byte) {
-	err := Ch.Publish(
-		"",
-		Q.Name,
-		false,
-		false,
-		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        post,
-		})
-	if err != nil {
-		log.Fatal(err.Error())
-		return
-	}
-}
 
 func ConsumeMssg() {
 	var err error
 	//Mssg = make(<-chan amqp.Delivery)
 	Mssg, err = Ch.Consume(
-		Q.Name,
+		"PostQ",
 		"",
 		true,
 		false,
@@ -38,6 +22,7 @@ func ConsumeMssg() {
 		log.Fatal(err)
 		return
 	}
+	fmt.Println("consuming....")
 }
 
 func StreamToByte(stream io.Reader) []byte {

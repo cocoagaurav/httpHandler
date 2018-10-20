@@ -18,3 +18,13 @@ services:
       - mysql
     links:
       - mysql
+
+  postapi:
+    build: ./Post/
+    ports:
+    - "8081:8081"
+    depends_on:
+    - mysql
+    - myapi
+    links:
+    - mysql

@@ -1,4 +1,4 @@
-package Post
+package main
 
 import (
 	"github.com/streadway/amqp"
@@ -14,4 +14,5 @@ func RabbitConn() {
 		log.Fatal(err.Error())
 		return
 	}
+	Ch, err = Conn.Channel()
 }

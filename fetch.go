@@ -1,4 +1,4 @@
-package Post
+package main
 
 import (
 	"database/sql"
@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
-	"net/http"
 	"github.com/cocoagaurav/httpHandler/model"
-	)
+	"net/http"
+)
 
 func Fetchformhandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, htmlPages.Fetchform)
@@ -16,18 +16,18 @@ func Fetchformhandler(w http.ResponseWriter, r *http.Request) {
 
 func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	var (
-		userid int
-		title string
+		userid      int
+		title       string
 		description string
 	)
-	err:=database.Db.Ping()
-	if(err!=nil){
+	err := database.Db.Ping()
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
-		}
-	userpost:=&model.User{}
-	err=json.NewDecoder(r.Body).Decode(userpost)
-	if (err != nil) {
+	}
+	userpost := &model.User{}
+	err = json.NewDecoder(r.Body).Decode(userpost)
+	if err != nil {
 		w.WriteHeader(http.StatusNoContent)
 	}
 	data, err := database.Db.Query("select * from post where USERID=(select UID from user where name=?)", userpost.Name)
@@ -40,7 +40,7 @@ func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	for data.Next() {
 		err := data.Scan(&userid, &title, &description)
-		if (err != nil) {
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 
@@ -50,5 +50,3 @@ func FetchHandler(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/fetchformhandler", 302)
 }
-
-
