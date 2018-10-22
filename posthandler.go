@@ -87,6 +87,5 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 	//	w.WriteHeader(http.StatusInternalServerError)
 	//	return
 	//}
-
 	http.Redirect(w, r, "/success", 302)
 }

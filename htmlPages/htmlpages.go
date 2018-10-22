@@ -10,15 +10,15 @@ const Formpage = `
 	  <label for="age">age</label>
       <input type="text" id="age" name="age">
       <button type="submit">Login</button>
-      <button type="submit" formaction="/registerform">register</button>
-      <button type="submit" formaction="/fetchformhandler">fetch post</button>
+      <button type="submit">register</button>
+      <button type="submit">fetch post</button>
 
   </form>
  `
 
 const Registerpage = `
   <h1>register</h1>
-  <form method="GET" action="/register">
+  <form method="GET">
       <label for="name">name</label>
       <input type="text" id="name" name="name">
       <label for="id">id</label>
@@ -38,7 +38,7 @@ const InternalPage = `
      <input type="text" id="title" name="title">
      <label for="discription">discription</label>
      <input type="text" id="discription" name="discription">
-      <button type="submit" formaction="/post">post</button>
+      <button type="submit">post</button>
 
       <button type="submit">Logout</button>
  </form>
@@ -46,10 +46,9 @@ const InternalPage = `
 
 const Fetchform = `
 <h1>fetch details<h1>
-<form method="POST" action="/fetch">
+<form method="GET">
         <label for="name">name</label>
         <input type="text" id="name" name="name">
         <button type="submit">fetch</button>
 </form>
 	`
-

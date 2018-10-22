@@ -14,5 +14,4 @@ func RabbitConn() {
 		log.Fatal(err.Error())
 		return
 	}
-	Ch, err = Conn.Channel()
 }

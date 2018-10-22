@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"log"
 )
@@ -22,7 +21,6 @@ func ConsumeMssg() {
 		log.Fatal(err)
 		return
 	}
-	fmt.Println("consuming....")
 }
 
 func StreamToByte(stream io.Reader) []byte {

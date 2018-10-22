@@ -4,6 +4,7 @@ import (
 	"github.com/cocoagaurav/httpHandler/database"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
+	"github.com/olivere/elastic"
 	"github.com/streadway/amqp"
 	"log"
 	"net/http"
@@ -12,10 +13,12 @@ import (
 //func init() {
 //	UserCache = make(map[string]*model.User)
 //}
-
-var UserToken string
-var route = mux.NewRouter()
-var Conn *amqp.Connection
+var (
+	UserToken     string
+	route         = mux.NewRouter()
+	Conn          *amqp.Connection
+	ElasticClient *elastic.Client
+)
 
 func main() {
 	var err error
@@ -25,6 +28,7 @@ func main() {
 		log.Fatal(err.Error())
 		return
 	}
+	ElasticConn()
 	//migration1:=migration.Getmigration()
 	//_,err:=migrate.Exec(database.Db,"mysql",migration1,migrate.Up)
 	//if(err!=nil){
@@ -44,7 +48,7 @@ func main() {
 	route.HandleFunc("/login", loginhandler)
 	route.HandleFunc("/logout", logoutHandler)
 	route.HandleFunc("/fetchformhandler", Fetchformhandler)
-	route.HandleFunc("/fetch", FetchHandler).Methods("POST")
+	route.HandleFunc("/fetch", FetchHandler).Methods("Post")
 	http.Handle("/", route)
 
 	log.Printf("Starting Sever :%v", 8080)
