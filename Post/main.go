@@ -30,7 +30,6 @@ func main() {
 			data := bytes.NewReader(msg.Body)
 			err := json.NewDecoder(data).Decode(post)
 			fmt.Printf("%v", post)
-
 			if err != nil {
 				log.Fatal(err)
 				return
@@ -46,6 +45,7 @@ func main() {
 				log.Fatal(err.Error())
 				return
 			}
+			msg.Ack(false)
 
 		}
 	}()
