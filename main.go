@@ -35,10 +35,10 @@ here:
 	log.Printf("rabbitmq is connected/.................")
 	Db = database.Opendatabase()
 	log.Printf("database is connected/.................")
-	migration1 := migration.Getmigration()
-	_, err = migrate.Exec(Db, "mysql", migration1, migrate.Up)
+	//migration1 := migration.Getmigration()
+	_, err = migrate.Exec(Db, "mysql", *migration.Migration, migrate.Up)
 	if err != nil {
-		log.Printf("error is in migration")
+		log.Printf("error is in migration:%v", err)
 		return
 	}
 	route.HandleFunc("/", formHandler)

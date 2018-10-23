@@ -13,7 +13,7 @@ var Migration = &migrate.MemoryMigrationSource{
 								age   	int     	NOT NULL,
 								PRIMARY KEY(UID)
 								)`,
-							`create table post(
+				`create table post(
 								id			int 			NOT NULL,
 								title		varchar(50) 	NOT NULL,
 								discription	varchar(50) 	NOT NULL,
@@ -27,6 +27,6 @@ var Migration = &migrate.MemoryMigrationSource{
 	},
 }
 
-func Getmigration() migrate.MemoryMigrationSource {
-	return *Migration
-}
+//func Getmigration() migrate.MemoryMigrationSource {
+//	return *Migration
+//}

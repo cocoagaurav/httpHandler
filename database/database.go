@@ -23,7 +23,7 @@ func Opendatabase() *sql.DB {
 		time.Sleep(5 * time.Second)
 		Opendatabase()
 	}
-	log.Printf("database is connected.......")
+	log.Printf("database is connected in func.......")
 	return DataBase
 
 }
