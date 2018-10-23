@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/migration"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
@@ -33,10 +32,10 @@ here:
 		goto here
 	}
 	log.Printf("rabbitmq is connected/.................")
-	Db = database.Opendatabase()
-	log.Printf("database is connected/.................")
-	//migration1 := migration.Getmigration()
-	_, err = migrate.Exec(Db, "mysql", *migration.Migration, migrate.Up)
+	Db, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
+	log.Printf("error value while connecting to DB:[%v]", err)
+	migration1 := migration.Getmigration()
+	_, err = migrate.Exec(Db, "mysql", migration1, migrate.Up)
 	if err != nil {
 		log.Printf("error is in migration:%v", err)
 		return

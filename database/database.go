@@ -17,6 +17,7 @@ var UserCache map[string]*model.User
 
 func Opendatabase() *sql.DB {
 	var err error
+	log.Printf("database is connecting in func.......")
 	DataBase, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		log.Printf("not able to connect to database")
@@ -24,6 +25,7 @@ func Opendatabase() *sql.DB {
 		Opendatabase()
 	}
 	log.Printf("database is connected in func.......")
+
 	return DataBase
 
 }

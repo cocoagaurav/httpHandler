@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/olivere/elastic"
@@ -17,7 +16,7 @@ func Fetchformhandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func FetchHandler(w http.ResponseWriter, r *http.Request) {
-	err := database.Db.Ping()
+	err := Db.Ping()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
