@@ -31,7 +31,7 @@ func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	esquery := elastic.NewTermQuery("id", userpost.Id)
 	result, err := ElasticClient.Search("userpost").Index("userpost").Type("post").Query(esquery).Do(context.Background())
 	if err != nil {
-		log.Printf("error is:", err.Error())
+		log.Printf("error is: [%v]", err.Error())
 	}
 	for _, hit := range result.Hits.Hits {
 		json.Unmarshal(*hit.Source, post)

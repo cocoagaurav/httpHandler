@@ -5,24 +5,61 @@ services:
   mysql:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: password123
-      MYSQL_DATABASE: test
+      MYSQL_ROOT_PASSWORD: "password123"
+      MYSQL_DATABASE: "test"
     ports:
-    - "3306:3306"
+      - "3306:3306"
+
+  elasticsearch:
+    image: elasticsearch:6.4.2
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - http.host=elasticsearch
+      - transport.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    healthcheck:
+      test: "curl -f http://localhost:9200 || exit 1"
+      interval: 1s
+      retries: 20
+
+  rabbitmq-server:
+    image: "rabbitmq:3-management"
+    hostname: "rabbitmq-server"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
 
   myapi:
     build: ./
     ports:
-    - "8081:8081"
+      - "8080:8080"
     depends_on:
       - mysql
+      - elasticsearch
+      - rabbitmq-server
     links:
       - mysql
+      - rabbitmq-server
+      - elasticsearch
 
   postapi:
-    build: ./Post/
+    build: /Users/gaurav/go/src/github.com/cocoagaurav/Post
     ports:
-    - "8081:8081"
+      - "8081:8081"
     depends_on:
-    - mysql
-    - myapi
+      - mysql
+      - myapi
+      - elasticsearch
+      - rabbitmq-server
+    links:
+      - mysql
+      - myapi
+      - elasticsearch
+      - rabbitmq-server
