@@ -3,11 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
-	"net/http"
 	"github.com/cocoagaurav/httpHandler/model"
-
+	"net/http"
 )
 
 func registerformHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,8 +13,8 @@ func registerformHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
-	err := database.Db.Ping()
-	if (err != nil) {
+	err := Db.Ping()
+	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 
@@ -28,7 +26,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cred, err := database.Db.Prepare("insert into user value (?,?,?)")
+	cred, err := Db.Prepare("insert into user value (?,?,?)")
 	defer cred.Close()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/migration"
 	_ "github.com/go-sql-driver/mysql"
@@ -18,6 +19,7 @@ var (
 	route         = mux.NewRouter()
 	Conn          *amqp.Connection
 	ElasticClient *elastic.Client
+	Db            *sql.DB
 )
 
 func main() {
@@ -31,12 +33,13 @@ here:
 		goto here
 	}
 	log.Printf("rabbitmq is connected/.................")
-	database.Db = database.Opendatabase()
+	Db = database.Opendatabase()
 	log.Printf("database is connected/.................")
 	migration1 := migration.Getmigration()
-	_, err = migrate.Exec(database.Db, "mysql", migration1, migrate.Up)
+	_, err = migrate.Exec(Db, "mysql", migration1, migrate.Up)
 	if err != nil {
 		log.Printf("error is in migration")
+		return
 	}
 	route.HandleFunc("/", formHandler)
 	route.HandleFunc("/success", simpleMiddleware(AfterLoginHandler))

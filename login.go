@@ -34,7 +34,7 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("loginUser :[%+v]", loginUser)
 
 	redirect := "/"
-	cred := database.Db.QueryRow("select name,age from user where UID=?", loginUser.Id)
+	cred := Db.QueryRow("select name,age from user where UID=?", loginUser.Id)
 
 	err = cred.Scan(&name, &age)
 	fmt.Println("database values are:", name, age)

@@ -15,7 +15,7 @@ func AfterLoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, htmlPages.InternalPage)
 }
 func Posthandler(w http.ResponseWriter, r *http.Request) {
-	err := database.Db.Ping()
+	err := Db.Ping()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

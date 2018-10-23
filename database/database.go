@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var Db, DataBase *sql.DB
+var DataBase *sql.DB
 
 func init() {
 	UserCache = make(map[string]*model.User)
