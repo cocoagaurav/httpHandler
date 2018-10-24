@@ -24,12 +24,12 @@ func main() {
 	var err error
 	ElasticConn()
 	Conn = RabbitConn()
-	Db = Opendatabase()
-	//Db, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
-	//if err != nil {
-	//	log.Fatal(err.Error())
-	//	return
-	//}
+	//Db = Opendatabase()
+	Db, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		log.Fatal(err.Error())
+		return
+	}
 
 	migration1 := migration.Getmigration()
 	_, err = migrate.Exec(Db, "mysql", migration1, migrate.Up)
