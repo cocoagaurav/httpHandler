@@ -2,8 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"github.com/cocoagaurav/httpHandler/migration"
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/labstack/gommon/log"
+	"github.com/rubenv/sql-migrate"
 	"time"
 )
 
@@ -28,4 +30,14 @@ func Opendatabase() *sql.DB {
 
 	return DataBase
 
+}
+
+func Migrate() {
+
+	migration1 := migration.Getmigration()
+	_, err := migrate.Exec(DataBase, "mysql", migration1, migrate.Up)
+	if err != nil {
+		log.Printf("error is in migration:%v", err)
+		return
+	}
 }

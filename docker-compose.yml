@@ -5,8 +5,8 @@ services:
   mysql:
     image: mysql
     environment:
-    - MYSQL_ROOT_PASSWORD = password123
-    - MYSQL_DATABASE = test
+      MYSQL_ROOT_PASSWORD : "password123"
+      MYSQL_DATABASE : "test"
     ports:
     - "3306:3306"
 

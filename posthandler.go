@@ -26,8 +26,6 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	uid := UserCache[c.Value]
-	//fmt.Printf("uid is:%v", uid)
-
 	newpost := &model.Post{}
 	err = json.NewDecoder(r.Body).Decode(newpost)
 	if err != nil {
@@ -73,18 +71,5 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err.Error())
 		return
 	}
-	////fmt.Printf("newpost :[%+v]",newpost)
-
-	//q, err := database.Db.Prepare("insert into post values(?,?,?)")
-	//if err != nil {
-	//	w.WriteHeader(http.StatusInternalServerError)
-	//	return
-	//}
-	//defer q.Close()
-	//_, err = q.Exec(uid.Id, newpost.Title, newpost.Discription)
-	//if err != nil {
-	//	w.WriteHeader(http.StatusInternalServerError)
-	//	return
-	//}
 	http.Redirect(w, r, "/success", 302)
 }

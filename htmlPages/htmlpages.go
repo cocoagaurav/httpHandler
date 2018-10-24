@@ -18,7 +18,7 @@ const Formpage = `
 
 const Registerpage = `
   <h1>register</h1>
-  <form method="GET">
+  <form method="GET" action="/">
       <label for="name">name</label>
       <input type="text" id="name" name="name">
       <label for="id">id</label>

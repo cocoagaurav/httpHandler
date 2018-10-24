@@ -13,7 +13,6 @@ func ElasticConn() {
 		log.Printf("err=[%v]", err)
 		time.Sleep(5 * time.Second)
 		ElasticConn()
-		//log.Fatal(err)
 	}
 	log.Printf("elastic search is connected..................")
 }
