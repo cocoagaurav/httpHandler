@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/cocoagaurav/httpHandler/database"
 	"net/http"
 )
 
@@ -16,7 +15,7 @@ func simpleMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(w 
 		}
 
 		token := c.Value
-		_, ok := database.UserCache[token]
+		_, ok := UserCache[token]
 		if ok == true {
 			next(w, r)
 		} else {

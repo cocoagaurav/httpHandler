@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/labstack/gommon/log"
@@ -26,7 +25,7 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	uid := database.UserCache[c.Value]
+	uid := UserCache[c.Value]
 	//fmt.Printf("uid is:%v", uid)
 
 	newpost := &model.Post{}

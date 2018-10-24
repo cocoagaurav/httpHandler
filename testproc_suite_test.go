@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/gorilla/mux"
 	"net/http"
 	"net/http/httptest"
@@ -18,7 +17,7 @@ func TestTestproc(t *testing.T) {
 }
 
 var _ = Describe("test the register handler", func() {
-	database.Db = database.Opendatabase()
+	Db = Opendatabase()
 	r := mux.NewRouter()
 	It("will run the register handler", func() {
 		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"name":"gomega404","id":410,"age":12}`)))

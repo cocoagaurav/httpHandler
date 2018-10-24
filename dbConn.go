@@ -1,4 +1,4 @@
-package database
+package main
 
 import (
 	"database/sql"
@@ -29,5 +29,3 @@ func Opendatabase() *sql.DB {
 	return DataBase
 
 }
-
-//DataBase, err = sql.Open("mysql", "root:password123@tcp(127.0.0.1:3306)/test")

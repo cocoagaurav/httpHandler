@@ -4,15 +4,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"github.com/cocoagaurav/httpHandler/database"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/satori/go.uuid"
 	"net/http"
 	"time"
 )
-
-var UserCache map[string]*model.User
 
 func formHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, htmlPages.Formpage)
@@ -54,7 +51,7 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 		token := uuid.NewV4()
 
 		UserToken = token.String()
-		database.UserCache[UserToken] = loginUser
+		UserCache[UserToken] = loginUser
 
 		http.SetCookie(w, &http.Cookie{
 			Name:    "sessiontoken",

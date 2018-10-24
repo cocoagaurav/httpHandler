@@ -10,7 +10,6 @@ import (
 	"github.com/streadway/amqp"
 	"log"
 	"net/http"
-	"time"
 )
 
 var (
@@ -24,22 +23,21 @@ var (
 func main() {
 	var err error
 	ElasticConn()
-here:
-	Conn, err = amqp.Dial("amqp://guest:guest@rabbitmq-server:5672/")
-	if err != nil {
-		log.Printf("not able to connect to rabbitmq")
-		time.Sleep(5 * time.Second)
-		goto here
-	}
-	log.Printf("rabbitmq is connected/.................")
-	Db, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
-	log.Printf("error value while connecting to DB:[%v]", err)
+	Conn = RabbitConn()
+	Db = Opendatabase()
+	//Db, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
+	//if err != nil {
+	//	log.Fatal(err.Error())
+	//	return
+	//}
+
 	migration1 := migration.Getmigration()
 	_, err = migrate.Exec(Db, "mysql", migration1, migrate.Up)
 	if err != nil {
 		log.Printf("error is in migration:%v", err)
 		return
 	}
+
 	route.HandleFunc("/", formHandler)
 	route.HandleFunc("/success", simpleMiddleware(AfterLoginHandler))
 	route.HandleFunc("/registerform", registerformHandler)
