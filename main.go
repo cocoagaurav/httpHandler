@@ -22,7 +22,7 @@ func main() {
 	ElasticConn()
 	Conn = RabbitConn()
 	Db = Opendatabase()
-	Migrate()
+	//Migrate()
 
 	route.HandleFunc("/", formHandler)
 	route.HandleFunc("/success", simpleMiddleware(AfterLoginHandler))
@@ -33,6 +33,7 @@ func main() {
 	route.HandleFunc("/logout", logoutHandler)
 	route.HandleFunc("/fetchformhandler", Fetchformhandler)
 	route.HandleFunc("/fetch", FetchHandler).Methods("Post")
+	route.HandleFunc("/quote/{date}", Getquote).Methods("Get")
 	http.Handle("/", route)
 
 	log.Printf("Starting Sever :%v", 8080)
