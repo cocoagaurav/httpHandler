@@ -10,7 +10,7 @@ import (
 
 func ElasticOpen() {
 	var err error
-	ElasticClient, err = elastic.NewClient(elastic.SetURL("http://elasticsearch:9200"))
+	ElasticClient, err = elastic.NewClient(elastic.SetURL("http://localhost:9200"))
 	if err != nil {
 		log.Printf("not able to get connection")
 		time.Sleep(5 * time.Second)
