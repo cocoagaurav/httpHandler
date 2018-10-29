@@ -50,7 +50,7 @@ services:
       - elasticsearch
 
   postapi:
-    build: /Users/gaurav/go/src/github.com/cocoagaurav/Post
+    build: /Users/gaurav/go/src/github.com/cocoagaurav/httpHandler/Post
     ports:
       - "8081:8081"
     depends_on:
@@ -63,3 +63,14 @@ services:
       - myapi
       - elasticsearch
       - rabbitmq-server
+
+  scrapapi:
+    build: /Users/gaurav/go/src/github.com/cocoagaurav/httpHandler/scrap
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq-server
+      - myapi
+    links:
+      - rabbitmq-server
+      - myapi

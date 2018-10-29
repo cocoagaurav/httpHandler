@@ -1,6 +1,6 @@
 From golang:onbuild
 
-WORKDIR /go/src/cocoagaurav/Post
+WORKDIR /go/src/cocoagaurav/httpHandler/Post
 COPY . .
 
 RUN go get -d -v ./...
