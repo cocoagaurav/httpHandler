@@ -1,3 +1,4 @@
+From golang:onbuild
 
 WORKDIR /go/src/cocoagaurav/httpHandler/scrap
 COPY . .
