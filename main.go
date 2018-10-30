@@ -22,7 +22,7 @@ func main() {
 	ElasticConn()
 	Conn = RabbitConn()
 	Db = Opendatabase()
-	//Migrate()
+	Migrate()
 
 	route.HandleFunc("/", formHandler)
 	route.HandleFunc("/success", simpleMiddleware(AfterLoginHandler))

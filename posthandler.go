@@ -20,6 +20,8 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+	fmt.Printf("request context value is :%v", r.Context().Value("UserId"))
+
 	c, err := r.Cookie("sessiontoken")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -32,8 +34,9 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	id := r.Context().Value("UserId")
 	newpost.Id = uid.Id
-	fmt.Printf("\n\npost id:%d \n post title:%s \n post disc:%s", newpost.Id, newpost.Title, newpost.Discription)
+	fmt.Printf("\n\npost id:%d \n post title:%s \n post disc:%s", id, newpost.Title, newpost.Discription)
 
 	jsonpost, err := json.Marshal(newpost)
 	if err != nil {

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/satori/go.uuid"
+	"log"
 	"net/http"
 	"time"
 )
@@ -20,6 +22,9 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 		name string
 		age  int
 	)
+	//ctx := context.Background()
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+	defer cancel()
 
 	loginUser := &model.User{}
 	err := json.NewDecoder(r.Body).Decode(loginUser)
@@ -44,9 +49,18 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	status := http.StatusFound
-	if loginUser.Name == name && loginUser.Age == age {
+	select {
+	case <-ctx.Done():
+		//	w.Write([]byte("request timeout"))
+		log.Printf("contexterr is:%v/n", ctx.Err())
+		http.Redirect(w, r, redirect, http.StatusRequestTimeout)
 
+	}
+	//fmt.Printf("context is:", <-ctx.Done())
+	time.Sleep(4 * time.Second)
+	status := http.StatusFound
+
+	if loginUser.Name == name && loginUser.Age == age {
 		redirect = "/success"
 		token := uuid.NewV4()
 
