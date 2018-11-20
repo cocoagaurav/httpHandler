@@ -1,14 +1,11 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
-	"github.com/satori/go.uuid"
-	"log"
 	"net/http"
 	"time"
 )
@@ -19,13 +16,10 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 func loginhandler(w http.ResponseWriter, r *http.Request) {
 
 	var (
-		name string
-		age  int
+		name   string
+		age    int
+		authId string
 	)
-	//ctx := context.Background()
-	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
-	defer cancel()
-
 	loginUser := &model.User{}
 	err := json.NewDecoder(r.Body).Decode(loginUser)
 	if err != nil {
@@ -35,11 +29,11 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("loginUser :[%+v]", loginUser)
 
-	redirect := "/"
-	cred := Db.QueryRow("select name,age from user where UID=?", loginUser.Id)
+	//redirect := "/"
+	cred := Db.QueryRow("select name,age,auth_id from user where UID=?", loginUser.Id)
 
-	err = cred.Scan(&name, &age)
-	fmt.Println("database values are:", name, age)
+	err = cred.Scan(&name, &age, &authId)
+	fmt.Println("database values are:", name, age, authId)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			w.WriteHeader(http.StatusNonAuthoritativeInfo)
@@ -49,32 +43,26 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	select {
-	case <-ctx.Done():
-		//	w.Write([]byte("request timeout"))
-		log.Printf("contexterr is:%v/n", ctx.Err())
-		http.Redirect(w, r, redirect, http.StatusRequestTimeout)
+	fmt.Println("label 2")
 
-	}
-	//fmt.Printf("context is:", <-ctx.Done())
-	time.Sleep(4 * time.Second)
 	status := http.StatusFound
 
 	if loginUser.Name == name && loginUser.Age == age {
-		redirect = "/success"
-		token := uuid.NewV4()
-
-		UserToken = token.String()
-		UserCache[UserToken] = loginUser
-
+		fmt.Println("label 3")
+		//	redirect = "/success"
+		token := "token123"
+		fmt.Println("label 4")
 		http.SetCookie(w, &http.Cookie{
 			Name:    "sessiontoken",
-			Value:   UserToken,
+			Value:   token,
 			Expires: time.Now().Add(24 * time.Hour),
 		})
+		fmt.Println("label 5")
 
 	} else {
 		status = http.StatusNotFound
 	}
-	http.Redirect(w, r, redirect, status)
+	fmt.Println("label 6")
+	//http.Redirect(w, r, redirect, status)
+	w.WriteHeader(status)
 }

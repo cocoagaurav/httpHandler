@@ -12,6 +12,7 @@ func Getmigration() migrate.MemoryMigrationSource {
 								name 	varchar(50) NOT NULL,
 								UID   	int         NOT NULL,
 								age   	int     	NOT NULL,
+								auth_id varchar(50)	NOT NULL,
 								PRIMARY KEY(UID)
 								)`,
 					`create table post(

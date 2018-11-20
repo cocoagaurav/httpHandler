@@ -1,31 +1,22 @@
 package main
 
 import (
-	"context"
-	"fmt"
 	"net/http"
 )
 
-func simpleMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.Background()
-		fmt.Printf("request context value is :%v", r.Context().Value("UserId"))
+func simpleMiddleware(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		c, err := r.Cookie("sessiontoken")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-
-		token := c.Value
-		val, ok := UserCache[token]
-		ctx = context.WithValue(ctx, "UserId", val.Id)
-
-		if ok == true {
-			next(w, r.WithContext(ctx))
+		tk := VerifyToken(c.Value)
+		if tk.UID != "" {
+			handler.ServeHTTP(w, r)
 		} else {
 			w.WriteHeader(http.StatusNotFound)
-			return
 		}
 
-	}
+	})
 }

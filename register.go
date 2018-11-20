@@ -26,17 +26,19 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cred, err := Db.Prepare("insert into user value (?,?,?)")
+	user := CreateFireBaseUser(newUser)
+	cred, err := Db.Prepare("insert into user value (?,?,?,?)")
 	defer cred.Close()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 
 	}
-	_, err = cred.Exec(newUser.Name, newUser.Id, newUser.Age)
+	_, err = cred.Exec(newUser.Name, newUser.Id, newUser.Age, user.UID)
 	if (err) != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	http.Redirect(w, r, "/", http.StatusOK)
 }

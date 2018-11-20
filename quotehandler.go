@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/streadway/amqp"
 	"net/http"
-	"strconv"
 )
 
 func Getquote(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +21,7 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	uid := UserCache[c.Value]
+	uid := VerifyToken(c.Value)
 	_, err = ch.QueueDeclare(
 		"response",
 		false,
@@ -49,7 +48,7 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 		amqp.Publishing{
 			ContentType:   "text/plain",
 			ReplyTo:       "response",
-			CorrelationId: strconv.Itoa(uid.Id),
+			CorrelationId: uid.UID,
 			Body:          []byte(params["date"]),
 		})
 
@@ -68,7 +67,7 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 		for mssg := range msg {
 			fmt.Printf("message is:%v", string(mssg.Body))
 
-			if strconv.Itoa(uid.Id) == mssg.CorrelationId {
+			if uid.UID == mssg.CorrelationId {
 				fmt.Fprint(w, string(mssg.Body))
 				mssg.Ack(false)
 				break

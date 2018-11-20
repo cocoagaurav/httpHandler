@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"github.com/cocoagaurav/httpHandler/migration"
-	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/labstack/gommon/log"
 	"github.com/rubenv/sql-migrate"
 	"time"
@@ -11,15 +10,9 @@ import (
 
 var DataBase *sql.DB
 
-func init() {
-	UserCache = make(map[string]*model.User)
-}
-
-var UserCache map[string]*model.User
-
 func Opendatabase() *sql.DB {
 	var err error
-	DataBase, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
+	DataBase, err = sql.Open("mysql", "root:password123@tcp(localhost:3306)/test?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		log.Printf("not able to connect to database")
 		time.Sleep(5 * time.Second)
