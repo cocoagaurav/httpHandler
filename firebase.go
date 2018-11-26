@@ -48,22 +48,37 @@ func CreateFireBaseUser(user *model.User) *auth.UserRecord {
 
 func GenerateToken(uid string) string {
 	client, _ = app.Auth(context.Background())
-	fmt.Println("label 8")
 	token, _ := client.CustomToken(context.Background(), uid)
-	fmt.Println("label 9")
+
 	return token
 
 }
 
 func VerifyToken(token string) *auth.Token {
-	fmt.Println("label 8")
+	fmt.Printf("\n varifying token is:%v", token)
 
-	tok, _ := client.VerifyIDToken(context.Background(), token)
+	//client, _ = app.Auth(context.Background())
+
+	tok, err := client.VerifyIDToken(context.Background())
+	if err != nil {
+		fmt.Printf(" \n err is:%v", err)
+		return nil
+	}
+	fmt.Printf("\n return token is:%T", tok)
+
+	fmt.Printf("\n varified token is:%v", tok)
 
 	fmt.Println("label 9")
 
-	fmt.Println("label 10")
-
 	return tok
 
+}
+
+func GetUserCreds(authId string) *auth.UserRecord {
+	user, err := client.GetUser(context.Background(), authId)
+	if err != nil {
+		fmt.Printf("error is:", err)
+		return nil
+	}
+	return user
 }

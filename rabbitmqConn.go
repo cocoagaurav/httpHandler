@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/streadway/amqp"
 	"log"
 	"time"
@@ -16,6 +17,6 @@ func RabbitConn() *amqp.Connection {
 		time.Sleep(5 * time.Second)
 		RabbitConn()
 	}
-	log.Printf("connected to rabbitmq......")
+	fmt.Printf("connected to rabbitmq...... \n\n")
 	return Connection
 }

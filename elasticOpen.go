@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/labstack/gommon/log"
 	"github.com/olivere/elastic"
 	"time"
@@ -14,5 +15,5 @@ func ElasticConn() {
 		time.Sleep(5 * time.Second)
 		ElasticConn()
 	}
-	log.Printf("elastic search is connected..................")
+	fmt.Printf("Starting elastic coonection \n\n")
 }

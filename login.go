@@ -29,11 +29,11 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("loginUser :[%+v]", loginUser)
 
-	//redirect := "/"
 	cred := Db.QueryRow("select name,age,auth_id from user where UID=?", loginUser.Id)
 
 	err = cred.Scan(&name, &age, &authId)
 	fmt.Println("database values are:", name, age, authId)
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			w.WriteHeader(http.StatusNonAuthoritativeInfo)
@@ -43,26 +43,16 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	fmt.Println("label 2")
+	userCred := GetUserCreds(authId)
 
-	status := http.StatusFound
-
-	if loginUser.Name == name && loginUser.Age == age {
-		fmt.Println("label 3")
-		//	redirect = "/success"
-		token := "token123"
-		fmt.Println("label 4")
+	if loginUser.Name == userCred.DisplayName && loginUser.Age == age && authId == userCred.UID {
+		token := GenerateToken(authId)
 		http.SetCookie(w, &http.Cookie{
 			Name:    "sessiontoken",
 			Value:   token,
 			Expires: time.Now().Add(24 * time.Hour),
 		})
-		fmt.Println("label 5")
+		json.NewEncoder(w).Encode(token)
 
-	} else {
-		status = http.StatusNotFound
 	}
-	fmt.Println("label 6")
-	//http.Redirect(w, r, redirect, status)
-	w.WriteHeader(status)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/cocoagaurav/httpHandler/migration"
 	"github.com/labstack/gommon/log"
 	"github.com/rubenv/sql-migrate"
@@ -18,7 +19,7 @@ func Opendatabase() *sql.DB {
 		time.Sleep(5 * time.Second)
 		Opendatabase()
 	}
-	log.Printf("database is connected in func.......")
+	fmt.Printf("Starting database... \n\n")
 
 	return DataBase
 
