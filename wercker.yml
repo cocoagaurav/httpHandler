@@ -1,0 +1,27 @@
+box: golang
+build:
+  steps:
+    - script:
+        name: Run tests
+        code: go test ./...
+    - internal/docker-build:
+        dockerfile: Dockerfile
+        image: myapi
+    - internal/docker-run:
+        image: myapi
+        name: myapiContainer
+    - internal/docker-kill:
+        image: myapiContainer
+    - internal/docker-push:
+      image-name: myapi
+      username: $username
+      password: $password
+      repository: https://hub.docker.com/r/gauravcococadocker/myapi/
+      tag: latest
+dev:
+  steps:
+  - internal/watch:
+      code: |
+        go build ./...
+        ./source
+      reload: true

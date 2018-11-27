@@ -1,13 +1,11 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     io.kompose.service: myapi
   name: myapi
 spec:
   replicas: 1
-  strategy: {}
   template:
     metadata:
       creationTimestamp: null
@@ -19,6 +17,28 @@ spec:
         name: myapi
         ports:
         - containerPort: 8080
-        resources: {}
-      restartPolicy: Always
-status: {}
+      - image: elasticsearch:6.4.2
+        name: elasticsearch
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+      - env:
+        - name: MYSQL_DATABASE
+          value: test
+        - name: MYSQL_ROOT_PASSWORD
+          value: password123
+        image: mysql
+        name: mysql
+        ports:
+        - containerPort: 3306
+      - env:
+        - name: RABBITMQ_DEFAULT_PASS
+          value: guest
+        - name: RABBITMQ_DEFAULT_USER
+          value: guest
+        image: rabbitmq:3-management
+        name: rabbitmq-server
+        ports:
+        - containerPort: 15672
+        - containerPort: 5672
+
