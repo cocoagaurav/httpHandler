@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"encoding/json"
@@ -18,12 +18,13 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	verToken, err := r.Cookie("sessiontoken")
-	if err != nil {
-		fmt.Printf("coocki error is:%v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	//verToken, err := r.Cookie("sessiontoken")
+	//if err != nil {
+	//	fmt.Printf("coocki error is:%v", err)
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	return
+	//}
+	verToken := r.Header.Get("token")
 	newpost := &model.Post{}
 	err = json.NewDecoder(r.Body).Decode(newpost)
 	if err != nil {
@@ -31,11 +32,11 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("\n\npost id:%d \n post title:%s \n post disc:%s \n token is:%s", newpost.Id, newpost.Title, newpost.Discription, verToken.Value)
+	fmt.Printf("\n\npost id:%d \n post title:%s \n post disc:%s \n token is:%s", newpost.Id, newpost.Title, newpost.Discription, verToken)
 
 	fmt.Println("label 4")
 
-	tok := VerifyToken(verToken.Value)
+	tok := VerifyToken(verToken)
 	fmt.Printf("\n verified token is:%v", tok)
 
 	//id := &tok.UID

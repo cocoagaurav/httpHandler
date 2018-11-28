@@ -1,19 +1,20 @@
-package main
+package handler
 
 import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/firebase"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"net/http"
 	"time"
 )
 
-func formHandler(w http.ResponseWriter, r *http.Request) {
+func FormHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, htmlPages.Formpage)
 }
-func loginhandler(w http.ResponseWriter, r *http.Request) {
+func Loginhandler(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		name   string
@@ -43,10 +44,10 @@ func loginhandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	userCred := GetUserCreds(authId)
+	userCred := firebase.GetUserCreds(authId)
 
 	if loginUser.Name == userCred.DisplayName && loginUser.Age == age && authId == userCred.UID {
-		token := GenerateToken(authId)
+		token := firebase.GenerateToken(authId)
 		http.SetCookie(w, &http.Cookie{
 			Name:    "sessiontoken",
 			Value:   token,

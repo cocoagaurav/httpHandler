@@ -1,4 +1,4 @@
-package main
+package firebase
 
 import (
 	"firebase.google.com/go"
@@ -28,7 +28,7 @@ func FirebaseStartAuth() {
 	}
 }
 
-func CreateFireBaseUser(user *model.User) *auth.UserRecord {
+func CreateFireBaseUser(user *model.User, email string) *auth.UserRecord {
 	var err error
 	client, err = app.Auth(context.Background())
 	if err != nil {
@@ -37,7 +37,8 @@ func CreateFireBaseUser(user *model.User) *auth.UserRecord {
 
 	params := (&auth.UserToCreate{}).
 		DisplayName(user.Name).
-		Password(strconv.Itoa(user.Id))
+		Password(strconv.Itoa(user.Id)).
+		Email(email)
 	u, err := client.CreateUser(context.Background(), params)
 	if err != nil {
 		log.Fatalf("error creating user: %v\n", err)
@@ -59,7 +60,7 @@ func VerifyToken(token string) *auth.Token {
 
 	//client, _ = app.Auth(context.Background())
 
-	tok, err := client.VerifyIDToken(context.Background())
+	tok, err := client.VerifyIDToken(context.Background(), token)
 	if err != nil {
 		fmt.Printf(" \n err is:%v", err)
 		return nil

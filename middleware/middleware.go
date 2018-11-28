@@ -1,17 +1,18 @@
-package main
+package middleware
 
 import (
+	"github.com/cocoagaurav/httpHandler/firebase"
 	"net/http"
 )
 
-func simpleMiddleware(handler http.Handler) http.Handler {
+func SimpleMiddleware(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		c, err := r.Cookie("sessiontoken")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		tk := VerifyToken(c.Value)
+		tk := firebase.VerifyToken(c.Value)
 		if tk.UID != "" {
 			handler.ServeHTTP(w, r)
 		} else {

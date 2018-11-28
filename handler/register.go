@@ -1,18 +1,19 @@
-package main
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/firebase"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
 	"net/http"
 )
 
-func registerformHandler(w http.ResponseWriter, r *http.Request) {
+func RegisterformHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, htmlPages.Registerpage)
 }
 
-func registerHandler(w http.ResponseWriter, r *http.Request) {
+func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	err := Db.Ping()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -25,8 +26,8 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-
-	user := CreateFireBaseUser(newUser)
+	email := "testuser@test.com"
+	user := firebase.CreateFireBaseUser(newUser, email)
 	cred, err := Db.Prepare("insert into user value (?,?,?,?)")
 	defer cred.Close()
 	if err != nil {
