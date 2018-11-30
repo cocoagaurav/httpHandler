@@ -65,4 +65,3 @@ services:
       - myapi
     links:
       - rabbitmq-server
-      - myapi

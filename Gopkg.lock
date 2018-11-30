@@ -62,12 +62,12 @@
   version = "v3.3.3"
 
 [[projects]]
-  digest = "1:adea5a94903eb4384abef30f3d878dc9ff6b6b5b0722da25b82e5169216dfb61"
+  digest = "1:ec6f9bf5e274c833c911923c9193867f3f18788c461f76f05f62bb1510e0ae65"
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
   pruneopts = "UT"
-  revision = "d523deb1b23d913de5bdada721a6071e71283618"
-  version = "v1.4.0"
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
 
 [[projects]]
   digest = "1:72856926f8208767b837bf51e3373f49139f61889b67dc7fd3c2a0fd711e3f7a"
@@ -96,22 +96,6 @@
   version = "v2.0.2"
 
 [[projects]]
-  digest = "1:c79fb010be38a59d657c48c6ba1d003a8aa651fa56b579d959d74573b7dff8e1"
-  name = "github.com/gorilla/context"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
-  version = "v1.1.1"
-
-[[projects]]
-  digest = "1:e73f5b0152105f18bc131fba127d9949305c8693f8a762588a82a48f61756f5f"
-  name = "github.com/gorilla/mux"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
-  version = "v1.6.2"
-
-[[projects]]
   branch = "master"
   digest = "1:59392ed8afb901aab4287d4894df8191722e34f3957716f4350c8c133ce99046"
   name = "github.com/hpcloud/tail"
@@ -126,15 +110,15 @@
   revision = "a1dbeea552b7c8df4b542c66073e393de198a800"
 
 [[projects]]
-  digest = "1:faee5b9f53eb1ae4eb04708c040c8c4dd685ce46509671e57a08520a15c54368"
+  digest = "1:01eb0269028d3c2e21b5b6cd9b1ba81bc4170ab293fcffa84e3aa3a6138a92e8"
   name = "github.com/labstack/gommon"
   packages = [
     "color",
     "log",
   ]
   pruneopts = "UT"
-  revision = "2a618302b929cc20862dda3aa6f02f64dbe740dd"
-  version = "v0.2.7"
+  revision = "7fd9f68ece0bcb1a905fac8f1549f0083f71c51b"
+  version = "v0.2.8"
 
 [[projects]]
   branch = "master"
@@ -166,7 +150,7 @@
   version = "v0.0.4"
 
 [[projects]]
-  digest = "1:e910cbdafbf77a84189338f673c4b5c624907042dff5996ff2df98726b146139"
+  digest = "1:115948b36ea412cfbc289f7b911ea0b0f536917cbd499d9df6a3d3ab58e6edc0"
   name = "github.com/olivere/elastic"
   packages = [
     ".",
@@ -174,11 +158,11 @@
     "uritemplates",
   ]
   pruneopts = "UT"
-  revision = "425e5369a8f054f4f447f7c8ee1bf605f48425ab"
-  version = "v6.2.11"
+  revision = "0f13c62d4153081f2be7d0e136353b57dd3f1619"
+  version = "v6.2.13"
 
 [[projects]]
-  digest = "1:42e29deef12327a69123b9cb2cb45fee4af5c12c2a23c6e477338279a052703f"
+  digest = "1:5f4b78246f0bcb105b1e3b2b9e22b52a57cd02f57a8078572fe27c62f4a75ff7"
   name = "github.com/onsi/ginkgo"
   packages = [
     ".",
@@ -201,11 +185,11 @@
     "types",
   ]
   pruneopts = "UT"
-  revision = "3774a09d95489ccaa16032e0770d08ea77ba6184"
-  version = "v1.6.0"
+  revision = "2e1be8f7d90e9d3e3e58b0ce470f2f14d075406f"
+  version = "v1.7.0"
 
 [[projects]]
-  digest = "1:ab54eea8d482272009e9e4af07d4d9b5236c27b4d8c54a3f2c99d163be883eca"
+  digest = "1:7a137fb7718928e473b7d805434ae563ec41790d3d227cdc64e8b14d1cab8a1f"
   name = "github.com/onsi/gomega"
   packages = [
     ".",
@@ -222,8 +206,8 @@
     "types",
   ]
   pruneopts = "UT"
-  revision = "7615b9433f86a8bdf29709bf288bc4fd0636a369"
-  version = "v1.4.2"
+  revision = "65fb64232476ad9046e57c26cd0bff3d3a8dc6cd"
+  version = "v1.4.3"
 
 [[projects]]
   digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
@@ -235,22 +219,22 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:cd638908d04442c8b6afd5d0221c21556e76c5e7130448ca97d249b47d66dd41"
+  digest = "1:89cf776c0a621a34017c819b66b9e0f0bb076d3c5b9ca74763fb89570e140038"
   name = "github.com/rubenv/sql-migrate"
   packages = [
     ".",
     "sqlparse",
   ]
   pruneopts = "UT"
-  revision = "3f452fc0ebebbb784fdab91f7bc79a31dcacab5c"
+  revision = "ba2c6a7295c59448dbc195cef2f41df5163b3892"
 
 [[projects]]
   branch = "master"
-  digest = "1:0c088044c1c1ee83e723692442df4fec9b3f2e57f7a99773485c97adfbc31695"
+  digest = "1:68284c262f45718a220f7e817c2125a0f20eb3924be5074fa187ff7bc600c47e"
   name = "github.com/streadway/amqp"
   packages = ["."]
   pruneopts = "UT"
-  revision = "70e15c650864f4fc47f5d3c82ea117285480895d"
+  revision = "27835f1a64e97101d95306211f03c0620ffa295d"
 
 [[projects]]
   digest = "1:c468422f334a6b46a19448ad59aaffdfc0a36b08fdcc1c749a0b29b6453d7e59"
@@ -294,7 +278,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:e9b5f44a9dd339afa0658606991de208ca826a819cb951ac1409dceb294c21ea"
+  digest = "1:3b26c934d4b1b601aa272456290a18144b072259c44e92040a1925fec6ed7013"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -310,7 +294,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "49bb7cea24b1df9410e1712aa6433dae904ff66a"
+  revision = "fae4c4e3ad76c295c3d6d259f898136b4bf833a8"
 
 [[projects]]
   branch = "master"
@@ -328,11 +312,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:0a40b0bdd57a93e741d8557465be3a2edeec408e9b6399586ad65bbe8e355796"
+  digest = "1:8775d8a768d9e65e8b659172804aac5db1fc8d563ba766470a6c2698c57c61a7"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "fa43e7bc11baaae89f3f902b2b4d832b68234844"
+  revision = "4ed8d59d0b35e1e29334a206d1b3f38b1e5dfb31"
 
 [[projects]]
   digest = "1:436b24586f8fee329e0dd65fd67c817681420cda1d7f934345c13fe78c212a73"
@@ -371,7 +355,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:569a11b977661cc0450c1a735bed5eb435e3e62796f34a5702cb8f34fbe17f62"
+  digest = "1:4860b50dd768fb22182375e9a65cf2c577c4ebc596d97f61f16e31fdb8a54053"
   name = "google.golang.org/api"
   packages = [
     "gensupport",
@@ -389,10 +373,10 @@
     "transport/http/internal/propagation",
   ]
   pruneopts = "UT"
-  revision = "0a71a4356c3f4bcbdd16294c78ca2a31fda36cca"
+  revision = "af4fc4062c262223ddc2d92f5f35a93690db383a"
 
 [[projects]]
-  digest = "1:d2cfb607095cee410f25a3c04eed77f76c4721d1bb0cbc894f5d8624b33394c8"
+  digest = "1:e0244364c406b721b0dbd37142a58deae8ee445751a9ebb760d23b7d748433a1"
   name = "google.golang.org/appengine"
   packages = [
     ".",
@@ -410,8 +394,8 @@
     "urlfetch",
   ]
   pruneopts = "UT"
-  revision = "ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06"
-  version = "v1.2.0"
+  revision = "4a4468ece617fc8205e99368fa2200e9d1fad421"
+  version = "v1.3.0"
 
 [[projects]]
   branch = "master"
@@ -473,12 +457,12 @@
   version = "v1.4.7"
 
 [[projects]]
-  digest = "1:fa9a7c0ef59217bd22f32eb7cc027894d73f340a5633258cc079dec025db6a7f"
+  digest = "1:1b36b0cb56126316f637ad55cfd5ed84c945fe45bd90e944666b4107a80a1da9"
   name = "gopkg.in/gorp.v1"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c87af80f3cc5036b55b83d77171e156791085e2e"
-  version = "v1.7.1"
+  revision = "6a667da9c028871f98598d85413e3fc4c6daa52e"
+  version = "v1.7.2"
 
 [[projects]]
   digest = "1:3c839a777de0e6da035c9de900b60cbec463b0a89351192c1ea083eaf9e0fce0"
@@ -488,12 +472,12 @@
   revision = "c131134a1947e9afd9cecfe11f4c6dff0732ae58"
 
 [[projects]]
-  digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
+  digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
   pruneopts = "UT"
-  revision = "5420a8b6744d3b0345ab293f6fcba19c978f1183"
-  version = "v2.2.1"
+  revision = "51d6538a90f86fe93ac480b35f37b2be17fef232"
+  version = "v2.2.2"
 
 [solve-meta]
   analyzer-name = "dep"
@@ -504,7 +488,6 @@
     "github.com/PuerkitoBio/goquery",
     "github.com/go-chi/chi",
     "github.com/go-sql-driver/mysql",
-    "github.com/gorilla/mux",
     "github.com/labstack/gommon/log",
     "github.com/olivere/elastic",
     "github.com/onsi/ginkgo",

@@ -26,20 +26,52 @@
 
 
 [[constraint]]
-  name = "github.com/go-sql-driver/mysql"
-  version = "1.4.0"
+  name = "firebase.google.com/go"
+  version = "3.4.0"
 
 [[constraint]]
-  name = "github.com/gorilla/mux"
-  version = "1.6.2"
+  name = "github.com/PuerkitoBio/goquery"
+  version = "1.5.0"
+
+[[constraint]]
+  name = "github.com/go-chi/chi"
+  version = "3.3.3"
+
+[[constraint]]
+  name = "github.com/go-sql-driver/mysql"
+  version = "1.4.1"
+
+[[constraint]]
+  name = "github.com/labstack/gommon"
+  version = "0.2.8"
+
+[[constraint]]
+  name = "github.com/olivere/elastic"
+  version = "6.2.13"
 
 [[constraint]]
   name = "github.com/onsi/ginkgo"
-  version = "1.6.0"
+  version = "1.7.0"
 
 [[constraint]]
   name = "github.com/onsi/gomega"
-  version = "1.4.2"
+  version = "1.4.3"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/rubenv/sql-migrate"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/streadway/amqp"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  branch = "master"
+  name = "google.golang.org/api"
 
 [prune]
   go-tests = true
