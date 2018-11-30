@@ -2,7 +2,10 @@ package main
 
 import (
 	"bytes"
-	"github.com/gorilla/mux"
+	"context"
+	"github.com/cocoagaurav/httpHandler/firebase"
+	"github.com/cocoagaurav/httpHandler/handler"
+	"github.com/go-chi/chi"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -17,48 +20,71 @@ func TestTestproc(t *testing.T) {
 }
 
 var _ = Describe("test the register handler", func() {
-	Db = Opendatabase()
-	r := mux.NewRouter()
+	firebase.FirebaseStartAuth()
+	r := chi.NewRouter()
+	Db := Opendatabase()
+	MigrateUp()
 	It("will run the register handler", func() {
-		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"name":"gomega404","id":410,"age":12}`)))
+		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"emailid":"gaurav@api.com","password":"simple","name":"gaurav","age":23}`)))
+		ctx := context.WithValue(req.Context(), "database", Db)
 		rr := httptest.NewRecorder()
-		r.HandleFunc("/register", registerHandler)
-		r.ServeHTTP(rr, req)
+		r.HandleFunc("/register", handler.RegisterHandler)
+		r.ServeHTTP(rr, req.WithContext(ctx))
 		Expect(err).ShouldNot(HaveOccurred())
-		Expect(rr.Code).To(Equal(http.StatusOK))
+		Expect(rr.Code).To(Equal(http.StatusCreated))
 	})
 
 	It("will run the register handler for existing user", func() {
-		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"name":"gomega404","id":407,"age":12}`)))
+		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"emailid":"bharadwaj@api.com","password":"simple","name":"bharadwaj","age":23}`)))
+		ctx := context.WithValue(req.Context(), "database", Db)
 		rr := httptest.NewRecorder()
-		r.HandleFunc("/register", registerHandler)
-		r.ServeHTTP(rr, req)
+		r.HandleFunc("/register", handler.RegisterHandler)
+		r.ServeHTTP(rr, req.WithContext(ctx))
 		Expect(err).ShouldNot(HaveOccurred())
-		Expect(rr.Code).To(Equal(http.StatusInternalServerError))
+		Expect(rr.Code).To(Equal(400))
 	})
 
 	Describe("test the login handler", func() {
 
 		It("will test login handler for wrong user id", func() {
-			req, err := http.NewRequest("POST", "/login", bytes.NewBuffer([]byte(`{"name":"gaurav","id":2,"age":23}`)))
+			req, err := http.NewRequest("POST", "/login", bytes.NewBuffer([]byte(`{"emailid":"fakeUser@api.com","password":"simple"}`)))
 			rr := httptest.NewRecorder()
+			ctx := context.WithValue(req.Context(), "database", Db)
 
-			r.HandleFunc("/login", loginhandler)
-			r.ServeHTTP(rr, req)
+			r.HandleFunc("/login", handler.Loginhandler)
+			r.ServeHTTP(rr, req.WithContext(ctx))
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(rr.Code).To(Equal(http.StatusNotFound))
+			Expect(rr.Code).To(Equal(http.StatusNonAuthoritativeInfo))
 
 		})
 
 		It("will test login handler for right user", func() {
-			req, err := http.NewRequest("POST", "/login", bytes.NewBuffer([]byte(`{"name":"gaurav","id":1,"age":23}`)))
+			req, err := http.NewRequest("POST", "/login", bytes.NewBuffer([]byte(`{"emailid":"gaurav@api.com","password":"simple"}`)))
+			ctx := context.WithValue(req.Context(), "database", Db)
+
 			rr := httptest.NewRecorder()
-			r.HandleFunc("/login", loginhandler)
-			r.ServeHTTP(rr, req)
+			r.HandleFunc("/login", handler.Loginhandler)
+			r.ServeHTTP(rr, req.WithContext(ctx))
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(rr.Code).To(Equal(http.StatusFound))
+			Expect(rr.Code).To(Equal(http.StatusOK))
 
 		})
+	})
+	Describe("remove the new user", func() {
+		It("remove user from firebase", func() {
+			var uid string
+			email := "gaurav@api.com"
+			err := Db.QueryRow("select auth_id from user where email_id = ?", email).Scan(&uid)
+			firebase.DeleteFirebaseUser(uid)
+			Expect(err).ShouldNot(HaveOccurred())
+
+		})
+		It("remove user from database", func() {
+			q, err := Db.Prepare("delete from user where name = 'gaurav' ")
+			q.Exec()
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
 	})
 
 })

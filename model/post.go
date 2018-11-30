@@ -1,7 +1,8 @@
 package model
 
 type Post struct {
-	Id          int    `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	EmailId     string `json:"emailid,omitempty"`
 	Title       string `json:"title,omitempty"`
 	Discription string `json:"discription,omitempty"`
 }

@@ -10,15 +10,15 @@ services:
     ports:
     - "3306:3306"
 
-  elasticsearch:
-    image: elasticsearch:6.4.2
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      - http.host=elasticsearch
-      - transport.host=0.0.0.0
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+#  elasticsearch:
+#    image: elasticsearch:6.4.2
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    environment:
+#      - http.host=elasticsearch
+#      - transport.host=0.0.0.0
+#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
 
   rabbitmq-server:
     image: "rabbitmq:3-management"
@@ -38,12 +38,10 @@ services:
       - "8080:8080"
     depends_on:
       - mysql
-      - elasticsearch
       - rabbitmq-server
     links:
       - mysql
       - rabbitmq-server
-      - elasticsearch
 
   postapi:
     build: /Users/gaurav/go/src/github.com/cocoagaurav/httpHandler/Post
@@ -52,12 +50,10 @@ services:
     depends_on:
       - mysql
       - myapi
-      - elasticsearch
       - rabbitmq-server
     links:
       - mysql
       - myapi
-      - elasticsearch
       - rabbitmq-server
 
   scrapapi:
