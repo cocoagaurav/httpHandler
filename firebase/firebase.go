@@ -27,7 +27,7 @@ func FirebaseStartAuth() {
 	}
 }
 
-func CreateFireBaseUser(user *model.User) *auth.UserRecord {
+func CreateFireBaseUser(user *model.User) (*auth.UserRecord, error) {
 	var err error
 	client, err = app.Auth(context.Background())
 	if err != nil {
@@ -41,10 +41,10 @@ func CreateFireBaseUser(user *model.User) *auth.UserRecord {
 		EmailVerified(false)
 	u, err := client.CreateUser(context.Background(), params)
 	if err != nil {
-		log.Fatalf("error creating user: %v\n", err)
+		log.Printf("error creating user: %v\n", err)
+		return nil, err
 	}
-	log.Printf("Successfully created user: %v\n", u)
-	return u
+	return u, err
 }
 
 func GenerateToken(uid string) string {
@@ -80,4 +80,13 @@ func GetUserCreds(authId string) *auth.UserRecord {
 		return nil
 	}
 	return user
+}
+
+func DeleteFirebaseUser(uid string) {
+	err := client.DeleteUser(context.Background(), uid)
+	if err != nil {
+		log.Fatalf("error deleting user: %v\n", err)
+	}
+	log.Printf("Successfully deleted user: %s\n", uid)
+
 }

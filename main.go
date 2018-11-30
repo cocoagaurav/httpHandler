@@ -33,6 +33,4 @@ func main() {
 
 	server.ListenAndServe()
 
-	MigrateDown()
-
 }

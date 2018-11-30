@@ -31,8 +31,18 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
+	var uid string
+	_ = Db.QueryRow("select auth_id from user where email_id = ?", newUser.EmailId).Scan(&uid)
+	if uid != "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	user, err := firebase.CreateFireBaseUser(newUser)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-	user := firebase.CreateFireBaseUser(newUser)
 	cred, err := Db.Prepare("insert into user " +
 		"							(name,email_id,password,age,auth_id) " +
 		"							 value (?,?,?,?,?)")
