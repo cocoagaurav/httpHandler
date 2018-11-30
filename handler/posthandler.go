@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
+	"github.com/streadway/amqp"
 	"log"
 	"net/http"
 )
@@ -14,11 +15,11 @@ func AfterLoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, htmlPages.InternalPage)
 }
 func Posthandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("label 1")
+
 	Db := r.Context().Value("database").(*sql.DB)
-	//	Conn := r.Context().Value("rabbit").(*amqp.Connection)
-	User := r.Context().Value("UserName").(*model.User)
-	fmt.Println("label 2")
+	Conn := r.Context().Value("rabbit").(*amqp.Connection)
+	User := r.Context().Value("user").(model.User)
+
 	err := Db.Ping()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -32,9 +33,8 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	fmt.Println("label 3")
 	newpost.Name = User.Name
-	fmt.Println("label 4")
+	newpost.EmailId = User.EmailId
 
 	fmt.Printf("\n\npost name:%s \n post title:%s \n post disc:%s ", newpost.Name, newpost.Title, newpost.Discription)
 
@@ -53,35 +53,35 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("json data is:%s", string(jsonpost))
 
-	//Ch, err := Conn.Channel()
-	//if err != nil {
-	//	log.Print(err.Error())
-	//}
-	//Q, err := Ch.QueueDeclare(
-	//	"PostQ",
-	//	false,
-	//	false,
-	//	false,
-	//	false,
-	//	nil,
-	//)
-	//if err != nil {
-	//	log.Print(err.Error())
-	//}
-	//err = Ch.Publish(
-	//	"",
-	//	Q.Name,
-	//	false,
-	//	false,
-	//	amqp.Publishing{
-	//		ContentType: "application/json",
-	//		Body:        jsonpost,
-	//	})
-	//if err != nil {
-	//	log.Print(err.Error())
-	//	return
-	//}
+	Ch, err := Conn.Channel()
+	if err != nil {
+		log.Print(err.Error())
+	}
+	Q, err := Ch.QueueDeclare(
+		"PostQ",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	err = Ch.Publish(
+		"",
+		Q.Name,
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "application/json",
+			Body:        jsonpost,
+		})
+	if err != nil {
+		log.Print(err.Error())
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(jsonpost)
+	json.NewEncoder(w).Encode(newpost)
 }

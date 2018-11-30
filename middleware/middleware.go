@@ -4,26 +4,31 @@ import (
 	"context"
 	"database/sql"
 	"github.com/cocoagaurav/httpHandler/model"
+	"log"
 	"net/http"
 )
 
 func UserMiddleware(Db *sql.DB) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			var User *model.User
+			var User model.User
 			c, err := r.Cookie("sessiontoken")
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			_ = Db.QueryRow("SELECT name , email_id   "+
+			err = Db.QueryRow("SELECT name , email_id   "+
 				"				FROM USER"+
 				"				WHERE auth_id = ?", c.Value).Scan(&User.Name, &User.EmailId)
 
-			if User == nil {
+			if err != nil {
+				log.Printf("error while getting user info :%v", err)
+			}
+
+			if User.Name == "" && User.EmailId == "" {
 				w.WriteHeader(http.StatusNoContent)
 			} else {
-				ctx := context.WithValue(r.Context(), "UserName", User)
+				ctx := context.WithValue(r.Context(), "user", User)
 				next.ServeHTTP(w, r.WithContext(ctx))
 			}
 

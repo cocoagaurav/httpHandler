@@ -12,7 +12,7 @@ import (
 func main() {
 	firebase.FirebaseStartAuth()
 
-	ElasticClient := ElasticConn()
+	//	ElasticClient := ElasticConn()
 
 	Conn := RabbitConn()
 
@@ -20,7 +20,6 @@ func main() {
 
 	config := &model.Configs{
 		Db:     DataBase,
-		Ec:     ElasticClient,
 		Rabbit: Conn,
 	}
 

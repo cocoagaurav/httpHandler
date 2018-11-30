@@ -14,14 +14,15 @@ func Getmigration() migrate.MemoryMigrationSource {
 								password varchar(50) NOT NULL,
 								age   	 int     	 NOT NULL,
 								auth_id  varchar(50) NOT NULL,
-								UNIQUE(email_id),
-								PRIMARY KEY(auth_id)
+								UNIQUE(auth_id),
+								PRIMARY KEY(email_id)
 								)`,
 					`create table post(
-								id			varchar(50) 	NOT NULL,
+								Name		varchar(50) 	NOT NULL,
+								id			varchar(50)		NOT NULL,
 								title		varchar(50) 	NOT NULL,
 								discription	varchar(50) 	NOT NULL,
-								FOREIGN KEY (id) REFERENCES user(auth_id)
+								FOREIGN KEY (id) REFERENCES user(email_id)
 								)`},
 				Down: []string{`
 									drop table post;

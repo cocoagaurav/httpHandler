@@ -23,7 +23,7 @@ func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusNoContent)
 	}
-	rows, err := Db.Query("SELECT * FROM POST WHERE NAME = ?", userpost.Name)
+	rows, err := Db.Query("SELECT * FROM POST WHERE id = ?", userpost.EmailId)
 	if err != nil {
 		log.Printf("error while getting post:%v", err)
 		w.WriteHeader(http.StatusNoContent)
@@ -31,12 +31,12 @@ func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&post.Name, &post.Title, &post.Discription)
+		err := rows.Scan(&post.Name, &post.EmailId, &post.Title, &post.Discription)
 		if err != nil {
 			log.Printf("error while scaning rows:%v", err)
 			w.WriteHeader(http.StatusBadRequest)
 		}
-		post := fmt.Sprintf("Name = %s \n Title = %s \n Discription = %s", post.Name, post.Title, post.Discription)
+		post := fmt.Sprintf("Name = %s   Title = %s   Discription = %s", post.Name, post.Title, post.Discription)
 
 		json.NewEncoder(w).Encode(post)
 	}

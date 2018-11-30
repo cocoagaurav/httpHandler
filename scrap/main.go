@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/labstack/gommon/log"
 	"github.com/streadway/amqp"
+	"net/http"
 )
 
 func main() {
@@ -38,11 +39,10 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	scrap := make(chan bool)
+	//	scrap := make(chan bool)
 	go func() {
 		for date := range dates {
 			resp := Scrap(string(date.Body))
-			fmt.Printf(resp)
 			err = ch.Publish(
 				"",
 				date.ReplyTo,
@@ -57,6 +57,6 @@ func main() {
 		}
 	}()
 	fmt.Println("scrapping....")
-	<-scrap
-
+	http.ListenAndServe(":8082", nil)
+	//	<-scrap
 }

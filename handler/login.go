@@ -16,11 +16,7 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 }
 func Loginhandler(w http.ResponseWriter, r *http.Request) {
 
-	var (
-		name   string
-		age    int
-		authId string
-	)
+	var authId string
 	Db := r.Context().Value("database").(*sql.DB)
 
 	loginUser := &model.User{}
@@ -31,7 +27,7 @@ func Loginhandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("loginUser :[%+v]", loginUser)
+	//fmt.Printf("loginUser :[%+v]", loginUser)
 
 	cred := Db.QueryRow("select auth_id "+
 		"						from user "+
@@ -39,7 +35,7 @@ func Loginhandler(w http.ResponseWriter, r *http.Request) {
 
 	err = cred.Scan(&authId)
 
-	fmt.Println("database values are:", name, age, authId)
+	//fmt.Println("database values are:", name, age, authId)
 
 	if err != nil {
 		if err == sql.ErrNoRows {

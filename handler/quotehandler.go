@@ -3,16 +3,16 @@ package handler
 import (
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/model"
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
 	"github.com/labstack/gommon/log"
 	"github.com/streadway/amqp"
 	"net/http"
 )
 
 func Getquote(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
+	params := chi.URLParam(r, "date")
 	Conn := r.Context().Value("rabbit").(*amqp.Connection)
-	User := r.Context().Value("user").(*model.User)
+	User := r.Context().Value("user").(model.User)
 	ch, err := Conn.Channel()
 	if err != nil {
 		log.Printf("error while creating channle")
@@ -47,7 +47,7 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 			ContentType:   "text/plain",
 			ReplyTo:       "response",
 			CorrelationId: User.EmailId,
-			Body:          []byte(params["date"]),
+			Body:          []byte(params),
 		})
 
 	msg, err := ch.Consume(
@@ -63,8 +63,6 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 
 	go func() {
 		for mssg := range msg {
-			fmt.Printf("message is:%v", string(mssg.Body))
-
 			if User.EmailId == mssg.CorrelationId {
 				fmt.Fprint(w, string(mssg.Body))
 				mssg.Ack(false)

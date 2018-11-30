@@ -10,21 +10,22 @@ import (
 	"github.com/olivere/elastic"
 	"github.com/streadway/amqp"
 	"log"
+	"net/http"
 )
 
 var (
-	Ch            *amqp.Channel
-	Mssg          <-chan amqp.Delivery
-	ElasticClient *elastic.Client
-	Db            *sql.DB
-	Bulk          *elastic.BulkService
+	Ch   *amqp.Channel
+	Mssg <-chan amqp.Delivery
+	//ElasticClient *elastic.Client
+	Db   *sql.DB
+	Bulk *elastic.BulkService
 )
 
 func main() {
-	ElasticOpen()
+	//ElasticOpen()
 	RabbitConn()
 	Db = Opendatabase()
-	listen := make(chan bool)
+	//listen := make(chan bool)
 	Ch, _ = Conn.Channel()
 	Q, err := Ch.QueueDeclare(
 		"PostQ",
@@ -60,23 +61,24 @@ func main() {
 					log.Fatal(err)
 					return
 				}
-				q, err := Db.Prepare("insert into post values(?,?,?)")
+				q, err := Db.Prepare("insert into post values(?,?,?,?)")
 				defer q.Close()
 				if err != nil {
 					log.Fatal(err)
 					return
 				}
-				_, err = q.Exec(post.Name, post.Title, post.Discription)
+				_, err = q.Exec(post.Name, post.EmailId, post.Title, post.Discription)
 				if err != nil {
 					log.Fatal(err.Error())
 					return
 				}
-				Datainsert(string(msg.Body))
+				//Datainsert(string(msg.Body))
 				msg.Ack(false)
 			}(msg)
 		}
 	}()
 
 	fmt.Println("listening....")
-	<-listen
+	http.ListenAndServe(":8081", nil)
+	//	<-listen
 }
