@@ -2,35 +2,45 @@ package router
 
 import (
 	"github.com/cocoagaurav/httpHandler/handler"
+	"github.com/cocoagaurav/httpHandler/middleware"
+	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/go-chi/chi"
-	"github.com/shaleapps/agnus-server/mware"
 	"net/http"
 )
 
-func Setuproutes() {
+func Setuproutes(config *model.Configs) http.Handler {
 	var route = chi.NewRouter()
+
+	route.Use(middleware.DatabaseMiddleWare(config))
 
 	route.Post("/", handler.FormHandler)
 	route.Post("/login", handler.Loginhandler)
-	route.Mount("/", Authroutes())
+	route.Post("/registerform", handler.RegisterformHandler)
+	route.Post("/register", handler.RegisterHandler)
+
+	route.Mount("/", Authroutes(config))
+
+	return route
 
 }
 
-func Authroutes() http.Handler {
+func Authroutes(config *model.Configs) http.Handler {
 
 	var route = chi.NewRouter()
 
-	route.Use()
-	route.Use(mware.database())
+	route.Use(middleware.UserMiddleware(config.Db))
+	route.Use(middleware.DatabaseMiddleWare(config))
+	route.Use(middleware.ElasticMiddleWare(config))
+	route.Use(middleware.RabbitMiddleWare(config))
 
-	route.Post("/registerform", handler.RegisterformHandler)
-	route.Post("/register", handler.RegisterHandler)
 	route.Post("/post", handler.Posthandler)
 	route.Post("/logout", handler.LogoutHandler)
 	route.Post("/fetchformhandler", handler.Fetchformhandler)
 	route.Post("/fetch", handler.FetchHandler)
 	route.Get("/quote/{date}", handler.Getquote)
 
-	http.Handle("/", route)
+	return route
+
+	//http.Handle("/", route)
 
 }

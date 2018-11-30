@@ -1,36 +1,39 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/firebase"
+	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/cocoagaurav/httpHandler/router"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/olivere/elastic"
-	"github.com/streadway/amqp"
 	"net/http"
-)
-
-var (
-	Conn          *amqp.Connection
-	ElasticClient *elastic.Client
-	Db            *sql.DB
 )
 
 func main() {
 	firebase.FirebaseStartAuth()
 
-	ElasticConn()
+	ElasticClient := ElasticConn()
 
-	Conn = RabbitConn()
+	Conn := RabbitConn()
 
-	Db = Opendatabase()
+	DataBase := Opendatabase()
 
-	Migrate()
+	config := &model.Configs{
+		Db:     DataBase,
+		Ec:     ElasticClient,
+		Rabbit: Conn,
+	}
 
-	router.Setuproutes()
+	MigrateUp()
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: router.Setuproutes(config),
+	}
 
 	fmt.Printf("Starting Sever :%v", 8080)
 
-	http.ListenAndServe(":8080", nil)
+	server.ListenAndServe()
+
+	MigrateDown()
+
 }

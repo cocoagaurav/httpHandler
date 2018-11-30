@@ -21,7 +21,10 @@ func Loginhandler(w http.ResponseWriter, r *http.Request) {
 		age    int
 		authId string
 	)
+	Db := r.Context().Value("database").(*sql.DB)
+
 	loginUser := &model.User{}
+
 	err := json.NewDecoder(r.Body).Decode(loginUser)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -30,9 +33,12 @@ func Loginhandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("loginUser :[%+v]", loginUser)
 
-	cred := Db.QueryRow("select name,age,auth_id from user where UID=?", loginUser.Id)
+	cred := Db.QueryRow("select auth_id "+
+		"						from user "+
+		"						where email_id=? AND password=?", loginUser.EmailId, loginUser.Password)
 
-	err = cred.Scan(&name, &age, &authId)
+	err = cred.Scan(&authId)
+
 	fmt.Println("database values are:", name, age, authId)
 
 	if err != nil {
@@ -44,16 +50,14 @@ func Loginhandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	userCred := firebase.GetUserCreds(authId)
 
-	if loginUser.Name == userCred.DisplayName && loginUser.Age == age && authId == userCred.UID {
-		token := firebase.GenerateToken(authId)
-		http.SetCookie(w, &http.Cookie{
-			Name:    "sessiontoken",
-			Value:   token,
-			Expires: time.Now().Add(24 * time.Hour),
-		})
-		json.NewEncoder(w).Encode(token)
+	token := firebase.GenerateToken(authId)
+	http.SetCookie(w, &http.Cookie{
+		Name:    "sessiontoken",
+		Value:   authId,
+		Expires: time.Now().Add(24 * time.Hour),
+	})
 
-	}
+	json.NewEncoder(w).Encode(token)
+
 }

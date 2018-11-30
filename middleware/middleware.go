@@ -1,23 +1,58 @@
 package middleware
 
 import (
-	"github.com/cocoagaurav/httpHandler/firebase"
+	"context"
+	"database/sql"
+	"github.com/cocoagaurav/httpHandler/model"
 	"net/http"
 )
 
-func SimpleMiddleware(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c, err := r.Cookie("sessiontoken")
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-		tk := firebase.VerifyToken(c.Value)
-		if tk.UID != "" {
-			handler.ServeHTTP(w, r)
-		} else {
-			w.WriteHeader(http.StatusNotFound)
-		}
+func UserMiddleware(Db *sql.DB) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var User *model.User
+			c, err := r.Cookie("sessiontoken")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			_ = Db.QueryRow("SELECT name , email_id   "+
+				"				FROM USER"+
+				"				WHERE auth_id = ?", c.Value).Scan(&User.Name, &User.EmailId)
 
-	})
+			if User == nil {
+				w.WriteHeader(http.StatusNoContent)
+			} else {
+				ctx := context.WithValue(r.Context(), "UserName", User)
+				next.ServeHTTP(w, r.WithContext(ctx))
+			}
+
+		})
+	}
+}
+func DatabaseMiddleWare(config *model.Configs) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := context.WithValue(r.Context(), "database", config.Db)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
+func ElasticMiddleWare(config *model.Configs) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := context.WithValue(r.Context(), "elastic", config.Ec)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
+func RabbitMiddleWare(config *model.Configs) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := context.WithValue(r.Context(), "rabbit", config.Rabbit)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
 }

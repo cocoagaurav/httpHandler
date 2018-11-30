@@ -9,21 +9,23 @@ func Getmigration() migrate.MemoryMigrationSource {
 				Id: "123",
 				Up: []string{`  
 								create table user(
-								name 	varchar(50) NOT NULL,
-								UID   	int         NOT NULL,
-								age   	int     	NOT NULL,
-								auth_id varchar(50)	NOT NULL,
-								PRIMARY KEY(UID)
+								name 	 varchar(50) NOT NULL,
+								email_id  varchar(50) NOT NULL,
+								password varchar(50) NOT NULL,
+								age   	 int     	 NOT NULL,
+								auth_id  varchar(50) NOT NULL,
+								UNIQUE(email_id),
+								PRIMARY KEY(auth_id)
 								)`,
 					`create table post(
-								id			int 			NOT NULL,
+								id			varchar(50) 	NOT NULL,
 								title		varchar(50) 	NOT NULL,
 								discription	varchar(50) 	NOT NULL,
-								FOREIGN KEY (id) REFERENCES user(UID)
+								FOREIGN KEY (id) REFERENCES user(auth_id)
 								)`},
 				Down: []string{`
-									drop table user;
 									drop table post;
+									drop table user;
 								`},
 			},
 		},

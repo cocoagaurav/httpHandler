@@ -66,7 +66,7 @@ func main() {
 					log.Fatal(err)
 					return
 				}
-				_, err = q.Exec(post.Id, post.Title, post.Discription)
+				_, err = q.Exec(post.Name, post.Title, post.Discription)
 				if err != nil {
 					log.Fatal(err.Error())
 					return

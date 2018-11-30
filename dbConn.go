@@ -22,13 +22,22 @@ func Opendatabase() *sql.DB {
 	fmt.Printf("Starting database... \n\n")
 
 	return DataBase
-
 }
 
-func Migrate() {
+func MigrateUp() {
 
 	migration1 := migration.Getmigration()
 	_, err := migrate.Exec(DataBase, "mysql", migration1, migrate.Up)
+	if err != nil {
+		log.Printf("error is in migration:%v", err)
+		return
+	}
+}
+
+func MigrateDown() {
+
+	migration1 := migration.Getmigration()
+	_, err := migrate.Exec(DataBase, "mysql", migration1, migrate.Down)
 	if err != nil {
 		log.Printf("error is in migration:%v", err)
 		return

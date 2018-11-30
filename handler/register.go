@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/firebase"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
+	"github.com/labstack/gommon/log"
 	"net/http"
 )
 
@@ -14,8 +16,10 @@ func RegisterformHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	Db := r.Context().Value("database").(*sql.DB)
 	err := Db.Ping()
 	if err != nil {
+		log.Printf("error while Db.ping err:%v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 
@@ -23,23 +27,32 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	newUser := &model.User{}
 	err = json.NewDecoder(r.Body).Decode(newUser)
 	if err != nil {
+		log.Printf("error while json decoder err:%v", err)
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-	email := "testuser@test.com"
-	user := firebase.CreateFireBaseUser(newUser, email)
-	cred, err := Db.Prepare("insert into user value (?,?,?,?)")
+
+	user := firebase.CreateFireBaseUser(newUser)
+	cred, err := Db.Prepare("insert into user " +
+		"							(name,email_id,password,age,auth_id) " +
+		"							 value (?,?,?,?,?)")
+
 	defer cred.Close()
+
 	if err != nil {
+		log.Printf("error while Db.prepare err:%v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 
 	}
-	_, err = cred.Exec(newUser.Name, newUser.Id, newUser.Age, user.UID)
+	_, err = cred.Exec(newUser.Name, newUser.EmailId, newUser.Password, newUser.Age, user.UID)
 	if (err) != nil {
+		log.Printf("error while Db.exec err:%v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusCreated)
 
-	http.Redirect(w, r, "/", http.StatusOK)
+	json.NewEncoder(w).Encode(newUser)
+
 }

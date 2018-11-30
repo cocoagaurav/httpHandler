@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/gorilla/mux"
 	"github.com/labstack/gommon/log"
 	"github.com/streadway/amqp"
@@ -10,18 +11,15 @@ import (
 
 func Getquote(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
+	Conn := r.Context().Value("rabbit").(*amqp.Connection)
+	User := r.Context().Value("user").(*model.User)
 	ch, err := Conn.Channel()
 	if err != nil {
 		log.Printf("error while creating channle")
 		return
 	}
 	defer ch.Close()
-	c, err := r.Cookie("sessiontoken")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	uid := VerifyToken(c.Value)
+
 	_, err = ch.QueueDeclare(
 		"response",
 		false,
@@ -48,7 +46,7 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 		amqp.Publishing{
 			ContentType:   "text/plain",
 			ReplyTo:       "response",
-			CorrelationId: uid.UID,
+			CorrelationId: User.EmailId,
 			Body:          []byte(params["date"]),
 		})
 
@@ -67,7 +65,7 @@ func Getquote(w http.ResponseWriter, r *http.Request) {
 		for mssg := range msg {
 			fmt.Printf("message is:%v", string(mssg.Body))
 
-			if uid.UID == mssg.CorrelationId {
+			if User.EmailId == mssg.CorrelationId {
 				fmt.Fprint(w, string(mssg.Body))
 				mssg.Ack(false)
 				break

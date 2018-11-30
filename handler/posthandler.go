@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/htmlPages"
 	"github.com/cocoagaurav/httpHandler/model"
+	"log"
 	"net/http"
 )
 
@@ -12,60 +14,48 @@ func AfterLoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, htmlPages.InternalPage)
 }
 func Posthandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("label 1")
+	Db := r.Context().Value("database").(*sql.DB)
+	//	Conn := r.Context().Value("rabbit").(*amqp.Connection)
+	User := r.Context().Value("UserName").(*model.User)
+	fmt.Println("label 2")
 	err := Db.Ping()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 
 	}
-	//verToken, err := r.Cookie("sessiontoken")
-	//if err != nil {
-	//	fmt.Printf("coocki error is:%v", err)
-	//	w.WriteHeader(http.StatusInternalServerError)
-	//	return
-	//}
-	verToken := r.Header.Get("token")
+
 	newpost := &model.Post{}
 	err = json.NewDecoder(r.Body).Decode(newpost)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	fmt.Printf("\n\npost id:%d \n post title:%s \n post disc:%s \n token is:%s", newpost.Id, newpost.Title, newpost.Discription, verToken)
-
+	fmt.Println("label 3")
+	newpost.Name = User.Name
 	fmt.Println("label 4")
 
-	tok := VerifyToken(verToken)
-	fmt.Printf("\n verified token is:%v", tok)
+	fmt.Printf("\n\npost name:%s \n post title:%s \n post disc:%s ", newpost.Name, newpost.Title, newpost.Discription)
 
-	//id := &tok.UID
+	var uid string
+	_ = Db.QueryRow("select auth_id "+
+		"					from user "+
+		"					where email_id =?", User.EmailId).
+		Scan(&uid)
 
-	//fmt.Println("label 5")
-	//
-	//fmt.Println(tok.UID)
-	//
-	//fmt.Println("label 6")
-	//	fmt.Println(tok.UID)
+	jsonpost, err := json.Marshal(newpost)
+	if err != nil {
+		log.Printf("post marshal error:%v", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-	//var uid string
-	//_ = Db.QueryRow("select id from user where auth_id =?", tok).Scan(&uid)
-	//
-	//newpost.Id, _ = strconv.Atoi(uid)
-	//
-	//jsonpost, err := json.Marshal(newpost)
-	//
-	//if err != nil {
-	//	log.Fatal(err.Error())
-	//	w.WriteHeader(http.StatusInternalServerError)
-	//	return
-	//}
-	//
-	//fmt.Printf("json data is:%s", string(jsonpost))
-	//
+	fmt.Printf("json data is:%s", string(jsonpost))
+
 	//Ch, err := Conn.Channel()
 	//if err != nil {
-	//	log.Fatal(err.Error())
+	//	log.Print(err.Error())
 	//}
 	//Q, err := Ch.QueueDeclare(
 	//	"PostQ",
@@ -76,7 +66,7 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 	//	nil,
 	//)
 	//if err != nil {
-	//	log.Fatal(err.Error())
+	//	log.Print(err.Error())
 	//}
 	//err = Ch.Publish(
 	//	"",
@@ -88,8 +78,10 @@ func Posthandler(w http.ResponseWriter, r *http.Request) {
 	//		Body:        jsonpost,
 	//	})
 	//if err != nil {
-	//	log.Fatal(err.Error())
+	//	log.Print(err.Error())
 	//	return
 	//}
-	w.WriteHeader(http.StatusOK) //http.Redirect(w, r, "/success", 302)
+	w.WriteHeader(http.StatusOK)
+
+	json.NewEncoder(w).Encode(jsonpost)
 }

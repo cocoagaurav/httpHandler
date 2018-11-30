@@ -8,7 +8,6 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"log"
-	"strconv"
 )
 
 var (
@@ -28,7 +27,7 @@ func FirebaseStartAuth() {
 	}
 }
 
-func CreateFireBaseUser(user *model.User, email string) *auth.UserRecord {
+func CreateFireBaseUser(user *model.User) *auth.UserRecord {
 	var err error
 	client, err = app.Auth(context.Background())
 	if err != nil {
@@ -37,8 +36,9 @@ func CreateFireBaseUser(user *model.User, email string) *auth.UserRecord {
 
 	params := (&auth.UserToCreate{}).
 		DisplayName(user.Name).
-		Password(strconv.Itoa(user.Id)).
-		Email(email)
+		Password(user.Password).
+		Email(user.EmailId).
+		EmailVerified(false)
 	u, err := client.CreateUser(context.Background(), params)
 	if err != nil {
 		log.Fatalf("error creating user: %v\n", err)
@@ -50,11 +50,9 @@ func CreateFireBaseUser(user *model.User, email string) *auth.UserRecord {
 func GenerateToken(uid string) string {
 	client, _ = app.Auth(context.Background())
 	token, _ := client.CustomToken(context.Background(), uid)
-
 	return token
 
 }
-
 func VerifyToken(token string) *auth.Token {
 	fmt.Printf("\n varifying token is:%v", token)
 
@@ -78,7 +76,7 @@ func VerifyToken(token string) *auth.Token {
 func GetUserCreds(authId string) *auth.UserRecord {
 	user, err := client.GetUser(context.Background(), authId)
 	if err != nil {
-		fmt.Printf("error is:", err)
+		fmt.Printf("error is:%s", err)
 		return nil
 	}
 	return user
