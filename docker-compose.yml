@@ -10,16 +10,6 @@ services:
     ports:
     - "3306:3306"
 
-#  elasticsearch:
-#    image: elasticsearch:6.4.2
-#    ports:
-#      - "9200:9200"
-#      - "9300:9300"
-#    environment:
-#      - http.host=elasticsearch
-#      - transport.host=0.0.0.0
-#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-
   rabbitmq-server:
     image: "rabbitmq:3-management"
     hostname: "rabbitmq-server"
@@ -65,3 +55,15 @@ services:
       - myapi
     links:
       - rabbitmq-server
+
+
+    #  elasticsearch:
+    #    image: elasticsearch:6.4.2
+    #    ports:
+    #      - "9200:9200"
+    #      - "9300:9300"
+    #    environment:
+    #      - http.host=elasticsearch
+    #      - transport.host=0.0.0.0
+    #      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+
