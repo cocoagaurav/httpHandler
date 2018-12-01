@@ -23,7 +23,7 @@ services:
       - "5672:5672"
 
   myapi:
-    build: ./
+    build: /Users/gaurav/go/src/github.com/cocoagaurav/httpHandler
     ports:
       - "8080:8080"
     depends_on:
