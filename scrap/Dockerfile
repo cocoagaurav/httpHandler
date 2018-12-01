@@ -1,6 +1,6 @@
 From golang:onbuild
 
-WORKDIR /go/src/cocoagaurav/httpHandler/scrap
+WORKDIR /go/src/github.com/cocoagaurav/httpHandler/scrap
 COPY . .
 
 RUN go get -d -v ./...

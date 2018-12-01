@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/model"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/olivere/elastic"
 	"github.com/streadway/amqp"
 	"log"
 	"net/http"
@@ -17,8 +16,7 @@ var (
 	Ch   *amqp.Channel
 	Mssg <-chan amqp.Delivery
 	//ElasticClient *elastic.Client
-	Db   *sql.DB
-	Bulk *elastic.BulkService
+	Db *sql.DB
 )
 
 func main() {

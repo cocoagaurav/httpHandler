@@ -1,6 +1,6 @@
 From golang
 
-WORKDIR /go/src/cocoagaurav/httpHandler
+WORKDIR /go/src/github.com/cocoagaurav/httpHandler
 COPY . .
 
 RUN go get -d -v ./...

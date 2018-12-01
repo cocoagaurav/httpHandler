@@ -70,6 +70,14 @@
   version = "v1.4.1"
 
 [[projects]]
+  branch = "master"
+  digest = "1:1ba1d79f2810270045c328ae5d674321db34e3aae468eb4233883b473c5c0467"
+  name = "github.com/golang/glog"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
+
+[[projects]]
   digest = "1:72856926f8208767b837bf51e3373f49139f61889b67dc7fd3c2a0fd711e3f7a"
   name = "github.com/golang/protobuf"
   packages = [
@@ -488,6 +496,7 @@
     "github.com/PuerkitoBio/goquery",
     "github.com/go-chi/chi",
     "github.com/go-sql-driver/mysql",
+    "github.com/golang/glog",
     "github.com/labstack/gommon/log",
     "github.com/olivere/elastic",
     "github.com/onsi/ginkgo",
