@@ -23,7 +23,7 @@ var _ = Describe("test the register handler", func() {
 	firebase.FirebaseStartAuth()
 	r := chi.NewRouter()
 	Db := Opendatabase()
-	MigrateUp()
+	MigrateUp(Db)
 	It("will run the register handler", func() {
 		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"emailid":"gaurav@api.com","password":"simple","name":"gaurav","age":23}`)))
 		ctx := context.WithValue(req.Context(), "database", Db)
