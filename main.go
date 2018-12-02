@@ -10,20 +10,18 @@ import (
 )
 
 func main() {
-	firebase.FirebaseStartAuth()
 
 	//	ElasticClient := ElasticConn()
-
 	Conn := RabbitConn()
-
 	DataBase := Opendatabase()
+	firebase.FirebaseStartAuth()
 
 	config := &model.Configs{
 		Db:     DataBase,
 		Rabbit: Conn,
 	}
 
-	MigrateUp()
+	MigrateUp(config.Db)
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: router.Setuproutes(config),

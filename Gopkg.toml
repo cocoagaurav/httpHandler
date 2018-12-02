@@ -42,12 +42,16 @@
   version = "1.4.1"
 
 [[constraint]]
+  branch = "master"
+  name = "github.com/golang/glog"
+
+[[constraint]]
   name = "github.com/labstack/gommon"
   version = "0.2.8"
 
 [[constraint]]
   name = "github.com/olivere/elastic"
-  version = "6.2.13"
+  version = "6.2.14"
 
 [[constraint]]
   name = "github.com/onsi/ginkgo"

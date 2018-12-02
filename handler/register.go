@@ -37,15 +37,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	user, err := firebase.CreateFireBaseUser(newUser)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	cred, err := Db.Prepare("insert into user " +
-		"							(name,email_id,password,age,auth_id) " +
-		"							 value (?,?,?,?,?)")
+	cred, err := Db.Prepare("insert into user (name,email_id,password,age,auth_id) value (?,?,?,?,?)")
 
 	defer cred.Close()
 
@@ -55,6 +47,12 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
+	user, err := firebase.CreateFireBaseUser(newUser)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	_, err = cred.Exec(newUser.Name, newUser.EmailId, newUser.Password, newUser.Age, user.UID)
 	if (err) != nil {
 		log.Printf("error while Db.exec err:%v", err)

@@ -158,7 +158,7 @@
   version = "v0.0.4"
 
 [[projects]]
-  digest = "1:115948b36ea412cfbc289f7b911ea0b0f536917cbd499d9df6a3d3ab58e6edc0"
+  digest = "1:995fe8c9729e94587361e836896824337bbceab8030f698a40552b1a63bf2c59"
   name = "github.com/olivere/elastic"
   packages = [
     ".",
@@ -166,8 +166,8 @@
     "uritemplates",
   ]
   pruneopts = "UT"
-  revision = "0f13c62d4153081f2be7d0e136353b57dd3f1619"
-  version = "v6.2.13"
+  revision = "1619150b007041b6dba8aa447f0e2d151cc2b4c5"
+  version = "v6.2.14"
 
 [[projects]]
   digest = "1:5f4b78246f0bcb105b1e3b2b9e22b52a57cd02f57a8078572fe27c62f4a75ff7"
@@ -286,7 +286,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3b26c934d4b1b601aa272456290a18144b072259c44e92040a1925fec6ed7013"
+  digest = "1:5cb3fa6e295a2207aae79e8de207069a1aa864d6ddb101b999c044f21df7ed98"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -302,7 +302,7 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "fae4c4e3ad76c295c3d6d259f898136b4bf833a8"
+  revision = "351d144fa1fc0bd934e2408202be0c29f25e35a0"
 
 [[projects]]
   branch = "master"

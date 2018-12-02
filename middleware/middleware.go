@@ -17,8 +17,8 @@ func UserMiddleware(Db *sql.DB) func(http.Handler) http.Handler {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			err = Db.QueryRow("SELECT name , email_id   "+
-				"				FROM USER"+
+			err = Db.QueryRow("SELECT name,email_id   "+
+				"				FROM user"+
 				"				WHERE auth_id = ?", c.Value).Scan(&User.Name, &User.EmailId)
 
 			if err != nil {

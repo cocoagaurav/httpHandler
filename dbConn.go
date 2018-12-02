@@ -9,11 +9,8 @@ import (
 	"time"
 )
 
-var DataBase *sql.DB
-
 func Opendatabase() *sql.DB {
-	var err error
-	DataBase, err = sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
+	DataBase, err := sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		log.Printf("not able to connect to database")
 		time.Sleep(5 * time.Second)
@@ -24,22 +21,13 @@ func Opendatabase() *sql.DB {
 	return DataBase
 }
 
-func MigrateUp() {
+func MigrateUp(dataBase *sql.DB) {
 
 	migration1 := migration.Getmigration()
-	_, err := migrate.Exec(DataBase, "mysql", migration1, migrate.Up)
+	_, err := migrate.Exec(dataBase, "mysql", migration1, migrate.Up)
 	if err != nil {
 		log.Printf("error is in migration:%v", err)
-		return
-	}
-}
-
-func MigrateDown() {
-
-	migration1 := migration.Getmigration()
-	_, err := migrate.Exec(DataBase, "mysql", migration1, migrate.Down)
-	if err != nil {
-		log.Printf("error is in migration:%v", err)
-		return
+		time.Sleep(5 * time.Second)
+		MigrateUp(dataBase)
 	}
 }

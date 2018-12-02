@@ -23,13 +23,13 @@ func FetchHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusNoContent)
 	}
-	rows, err := Db.Query("SELECT * FROM POST WHERE id = ?", userpost.EmailId)
+	rows, err := Db.Query("SELECT * FROM post WHERE id = ?", userpost.EmailId)
+	defer rows.Close()
 	if err != nil {
 		log.Printf("error while getting post:%v", err)
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-	defer rows.Close()
 	for rows.Next() {
 		err := rows.Scan(&post.Name, &post.EmailId, &post.Title, &post.Discription)
 		if err != nil {

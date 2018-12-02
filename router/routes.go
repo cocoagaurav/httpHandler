@@ -28,10 +28,10 @@ func Authroutes(config *model.Configs) http.Handler {
 
 	var route = chi.NewRouter()
 
-	route.Use(middleware.UserMiddleware(config.Db))
 	route.Use(middleware.DatabaseMiddleWare(config))
 	route.Use(middleware.ElasticMiddleWare(config))
 	route.Use(middleware.RabbitMiddleWare(config))
+	route.Use(middleware.UserMiddleware(config.Db))
 
 	route.Post("/post", handler.Posthandler)
 	route.Post("/logout", handler.LogoutHandler)
