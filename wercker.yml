@@ -1,27 +1,33 @@
-box: golang
+box: golang:1.11
+
+services:
+  - id: mysql
+    env:
+      MYSQL_ROOT_PASSWORD: "password123"
+      MYSQL_DATABASE: "test"
+  - id: rabbitmq:3-management
+    env:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+
 build:
   steps:
+
+    - setup-go-workspace
     - script:
-        name: Run tests
-        code: go test ./...
-    - internal/docker-build:
-        dockerfile: Dockerfile
-        image: myapi
-    - internal/docker-run:
-        image: myapi
-        name: myapiContainer
-    - internal/docker-kill:
-        image: myapiContainer
-    - internal/docker-push:
-      image-name: myapi
-      username: $username
-      password: $password
-      repository: https://hub.docker.com/r/gauravcococadocker/myapi/
-      tag: latest
-dev:
-  steps:
-  - internal/watch:
-      code: |
-        go build ./...
-        ./source
-      reload: true
+        name: go get
+        code: |
+          go get
+
+    - script:
+        name: go build
+        code: |
+          go build ./...
+
+    - script:
+        name: go test
+        code: |
+          go test ./...
+
