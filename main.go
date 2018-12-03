@@ -22,6 +22,7 @@ func main() {
 	}
 
 	MigrateUp(config.Db)
+
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: router.Setuproutes(config),

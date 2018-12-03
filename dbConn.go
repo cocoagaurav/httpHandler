@@ -30,4 +30,6 @@ func MigrateUp(dataBase *sql.DB) {
 		time.Sleep(5 * time.Second)
 		MigrateUp(dataBase)
 	}
+	fmt.Println("migration is ready")
+
 }

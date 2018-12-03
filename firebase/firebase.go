@@ -34,6 +34,7 @@ func FirebaseStartAuth() {
 	if err != nil {
 		log.Fatalf("error initializing app: %v\n", err)
 	}
+	fmt.Println("firebase is ready to serve")
 }
 
 func CreateFireBaseUser(user *model.User) (*auth.UserRecord, error) {
