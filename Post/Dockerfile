@@ -1,4 +1,4 @@
-From golang:onbuild
+From golang:1.11
 
 WORKDIR /go/src/github.com/cocoagaurav/httpHandler/Post
 COPY . .
