@@ -42,7 +42,7 @@ deploy:
         password: $PASSWORD
         repository: gauravcococadocker/myapi
     - internal/docker-build:
-        dockerfile: httpHandler/post/Dockerfile
+        dockerfile: httpHandler/Post/Dockerfile
         image-name: postapi
     - internal/docker-push:
         image-name: postapi
