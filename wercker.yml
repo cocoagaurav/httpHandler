@@ -17,7 +17,7 @@ build:
 
     - setup-go-workspace
     - script:
-        name: go get
+        name: go get ./...
         code: |
           go get
 
@@ -42,7 +42,7 @@ deploy:
         password: $PASSWORD
         repository: gauravcococadocker/myapi
     - internal/docker-build:
-        dockerfile: /post/Dockerfile
+        dockerfile: httpHandler/post/Dockerfile
         image-name: postapi
     - internal/docker-push:
         image-name: postapi
@@ -50,7 +50,7 @@ deploy:
         password: $PASSWORD
         repository: gauravcococadocker/postapi
     - internal/docker-build:
-        dockerfile: /scrap/Dockerfile
+        dockerfile: httpHandler/scrap/Dockerfile
         image-name: scrapapi
     - internal/docker-push:
         image-name: scrapapi
