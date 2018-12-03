@@ -4,6 +4,6 @@ WORKDIR /go/src/github.com/cocoagaurav/httpHandler/Post
 COPY . .
 
 RUN go get -d -v ./Post/...
-RUN go install ./
+RUN go install ./post/
 
 EXPOSE 8081
