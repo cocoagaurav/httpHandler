@@ -42,7 +42,7 @@ deploy:
         password: $PASSWORD
         repository: gauravcococadocker/myapi
     - internal/docker-build:
-        dockerfile: httpHandler/Post/Dockerfile
+        dockerfile: Post/Dockerfile
         image-name: postapi
     - internal/docker-push:
         image-name: postapi
@@ -50,7 +50,7 @@ deploy:
         password: $PASSWORD
         repository: gauravcococadocker/postapi
     - internal/docker-build:
-        dockerfile: httpHandler/scrap/Dockerfile
+        dockerfile: scrap/Dockerfile
         image-name: scrapapi
     - internal/docker-push:
         image-name: scrapapi
