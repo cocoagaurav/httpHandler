@@ -6,19 +6,28 @@ import (
 	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/cocoagaurav/httpHandler/router"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/kelseyhightower/envconfig"
+	"log"
 	"net/http"
 )
 
 func main() {
 
 	//	ElasticClient := ElasticConn()
-	Conn := RabbitConn()
-	DataBase := Opendatabase()
-	firebase.FirebaseStartAuth()
+	var env model.Env
+	err := envconfig.Process("myapi", &env)
+	if err != nil {
+		log.Printf("error while getting env variables:", err)
+		return
+	}
+	Conn := RabbitConn(env)
+	DataBase := Opendatabase(env)
+	firebase.FirebaseStartAuth(env)
 
 	config := &model.Configs{
 		Db:     DataBase,
 		Rabbit: Conn,
+		Env:    env,
 	}
 
 	MigrateUp(config.Db)

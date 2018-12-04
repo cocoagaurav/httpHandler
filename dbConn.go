@@ -4,17 +4,18 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/cocoagaurav/httpHandler/migration"
+	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/labstack/gommon/log"
 	"github.com/rubenv/sql-migrate"
 	"time"
 )
 
-func Opendatabase() *sql.DB {
-	DataBase, err := sql.Open("mysql", "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local")
+func Opendatabase(env model.Env) *sql.DB {
+	DataBase, err := sql.Open("mysql", env.SqlUrl)
 	if err != nil {
 		log.Printf("not able to connect to database")
 		time.Sleep(5 * time.Second)
-		Opendatabase()
+		Opendatabase(env)
 	}
 	fmt.Printf("Starting database... \n\n")
 

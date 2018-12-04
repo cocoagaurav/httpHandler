@@ -20,13 +20,25 @@ spec:
       containers:
       - env:
         - name: RABBITMQ_DEFAULT_PASS
-          value: guest
+          valueFrom:
+            secretKeyRef:
+              name: apisecrets
+              key: rabbit_pass
         - name: RABBITMQ_DEFAULT_USER
-          value: guest
+          valueFrom:
+            secretKeyRef:
+              name: apisecrets
+              key: rabbit_user
         - name: RABBITMQ_DEFAULT_VHOST
-          value: /
+          valueFrom:
+            secretKeyRef:
+              name: apisecrets
+              key: rabbit_host
         - name: RABBITMQ_ERLANG_COOKIE
-          value: SWQOKODSQALRPCLNMEQG
+          valueFrom:
+            secretKeyRef:
+              name:  apisecrets
+              key: rabbit_erlang_cookie
         image: rabbitmq:3-management
         name: rabbitmq-server
         ports:

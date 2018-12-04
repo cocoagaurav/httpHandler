@@ -10,4 +10,5 @@ type Configs struct {
 	Db     *sql.DB
 	Ec     *elastic.Client
 	Rabbit *amqp.Connection
+	Env    Env
 }

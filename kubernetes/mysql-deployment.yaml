@@ -20,13 +20,39 @@ spec:
       containers:
       - env:
         - name: MYSQL_DATABASE
-          value: test
+          valueFrom:
+            secretKeyRef:
+              name: apisecrets
+              key: mysql_database
         - name: MYSQL_ROOT_PASSWORD
-          value: password123
+          valueFrom:
+            secretKeyRef:
+              name: apisecrets
+              key: mysql_password
         image: mysql
         name: mysql
         ports:
         - containerPort: 3306
         resources: {}
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-volumeclaim
       restartPolicy: Always
+
 status: {}
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-volumeclaim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
