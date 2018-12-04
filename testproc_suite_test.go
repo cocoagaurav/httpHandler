@@ -5,7 +5,10 @@ import (
 	"context"
 	"github.com/cocoagaurav/httpHandler/firebase"
 	"github.com/cocoagaurav/httpHandler/handler"
+	"github.com/cocoagaurav/httpHandler/model"
 	"github.com/go-chi/chi"
+	"github.com/kelseyhightower/envconfig"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -20,9 +23,15 @@ func TestTestproc(t *testing.T) {
 }
 
 var _ = Describe("test the register handler", func() {
-	firebase.FirebaseStartAuth()
+	var env model.Env
+	err := envconfig.Process("myapi", &env)
+	if err != nil {
+		log.Printf("error while getting env variables:", err)
+		return
+	}
+	firebase.FirebaseStartAuth(env)
 	r := chi.NewRouter()
-	Db := Opendatabase()
+	Db := Opendatabase(env)
 	MigrateUp(Db)
 	It("will run the register handler", func() {
 		req, err := http.NewRequest("POST", "/register", bytes.NewBuffer([]byte(`{"emailid":"gaurav@api.com","password":"simple","name":"gaurav","age":23}`)))
