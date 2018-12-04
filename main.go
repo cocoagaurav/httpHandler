@@ -20,6 +20,7 @@ func main() {
 		log.Printf("error while getting env variables:%s", err.Error())
 		return
 	}
+	fmt.Printf("env:%v", env)
 	Conn := RabbitConn(env)
 	DataBase := Opendatabase(env)
 	firebase.FirebaseStartAuth(env)
