@@ -17,7 +17,7 @@ func main() {
 	var env model.Env
 	err := envconfig.Process("myapi", &env)
 	if err != nil {
-		log.Printf("error while getting env variables:", err)
+		log.Printf("error while getting env variables:%v", err)
 		return
 	}
 	Conn := RabbitConn(env)
