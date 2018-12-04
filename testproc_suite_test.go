@@ -26,7 +26,7 @@ var _ = Describe("test the register handler", func() {
 	var env model.Env
 	err := envconfig.Process("myapi", &env)
 	if err != nil {
-		log.Printf("error while getting env variables:", err)
+		log.Printf("error while getting env variables:%s", err.Error())
 		return
 	}
 	firebase.FirebaseStartAuth(env)
