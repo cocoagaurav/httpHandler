@@ -22,13 +22,22 @@ spec:
         name: myapi
         ports:
         - containerPort: 8080
-    env:
-    - name: myapi_Sql_Url
-      value: "root:password123@tcp(mysql:3306)/test?charset=utf8&parseTime=True&loc=Local"
-    - name: myapi_rabbit_Url
-      value: "amqp://guest:guest@rabbitmq-server:5672/"
-    - name: myapi_firebase_service_Id
-      value:  "firebase-adminsdk-6b9tl@testproject-fa267.iam.gserviceaccount.com"
+        env:
+          - name: myapi_Sql_Url
+            valueFrom:
+              configMapKeyRef:
+                name: myapiconfig
+                key: SqlUrl
+          - name: myapi_rabbit_Url
+            valueFrom:
+              configMapKeyRef:
+                name: myapiconfig
+                key: RabbitUrl
+          - name: myapi_firebase_service_Id
+            valueFrom:
+              configMapKeyRef:
+                name: myapiconfig
+                key: FireId
         resources: {}
       restartPolicy: Always
 status: {}
