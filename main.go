@@ -15,11 +15,12 @@ func main() {
 
 	//	ElasticClient := ElasticConn()
 	var env model.Env
-	err := envconfig.Process("myapi", &env)
+	err := envconfig.Process("MYAPI", &env)
 	if err != nil {
 		log.Printf("error while getting env variables:%s", err.Error())
 		return
 	}
+	fmt.Printf("mysql:%v \n rabbit:%v \n firebase:%v \n", env.SqlUrl, env.RabbitUrl, env.FirebaseServiceId)
 	Conn := RabbitConn(env)
 	DataBase := Opendatabase(env)
 	firebase.FirebaseStartAuth(env)

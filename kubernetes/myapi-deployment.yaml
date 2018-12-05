@@ -23,17 +23,17 @@ spec:
         ports:
         - containerPort: 8080
         env:
-          - name: myapi_Sql_Url
+          - name: MYAPI_SQL_URL
             valueFrom:
               configMapKeyRef:
                 name: myapiconfig
                 key: SqlUrl
-          - name: myapi_rabbit_Url
+          - name: MYAPI_RABBIT_URL
             valueFrom:
               configMapKeyRef:
                 name: myapiconfig
                 key: RabbitUrl
-          - name: myapi_firebase_service_Id
+          - name: MYAPI_FIREBASE_SERVICE_ID
             valueFrom:
               configMapKeyRef:
                 name: myapiconfig
